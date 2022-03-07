@@ -1,2 +1,1 @@
-# brain-on-ascii
-making a blog with notion as database and next as front end
+This is a starter template for [Learn Next.js](https://nextjs.org/learn).
