@@ -19,7 +19,10 @@ export default function Home({ posts }) {
         <header className={styles.header}>
           <div className={styles.logos}></div>
           <h1>blog goblog</h1>
-          <p>tempat buat cerita. soalnya gada orang yg mo denger. and that's not wrong, ngapain orang mo dengerin hal yg gada advantage nya buat mereka. kalopun ada yg mo denger, probably tak paksa</p>
+          <p>
+            tempat buat cerita. soalnya gada orang yg mo denger. and that's not wrong, ngapain orang mo dengerin hal yg gada advantage nya buat mereka. kalopun ada yg mo denger, probably tak paksa. god i sound like a big ass. here's me
+            being sassy to balance it out, OH MYG DOAODASOFASJDLSKJF;LAS;FDLKJ
+          </p>
         </header>
 
         <h2 className={styles.heading}>All Posts</h2>
