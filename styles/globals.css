@@ -27,8 +27,10 @@ a {
   text-decoration: none;
 }
 
+/* sementara, biar keliatan mana yang mana */
 * {
-  box-sizing: border-box;
+  /* border-width: 1px; */
+  /* box-sizing: border-box; */
 }
 
 h1 {

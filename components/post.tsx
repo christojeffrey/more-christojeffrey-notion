@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import styles from "./post.module.css";
 
+// suatu text biasa di notion itu bisa ada yg di bold, italic, dkk. untuk tiap Text, di render menggunakan component Text.
 export const Text = ({ text }) => {
   if (!text) {
     return null;
@@ -18,6 +19,7 @@ export const Text = ({ text }) => {
   });
 };
 
+// notion itu terdiri atas block block. untuk tiap block, di render pake component renderBlock
 export const renderBlock = (block) => {
   const { type, id } = block;
   const value = block[type];
