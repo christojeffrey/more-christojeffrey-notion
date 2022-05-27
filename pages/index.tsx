@@ -22,14 +22,14 @@ export default function Home({ posts }) {
         <header className={styles.header}>
           <div className={styles.logos}></div>
           <h1>blog</h1>
-          <p>helo! im jeff, and site ini dipake buat cerita, whatever i feel like to tell</p>
+          <p>helo! im jeff, and site ini dipake buat cerita, whatever i feel like to tell. the content here is like twitter, instagram, and, medium combined </p>
         </header>
 
         <h2 className={styles.heading}>All Posts</h2>
         <div className={styles.posts}>
           {/* card of post in here */}
 
-          <StackGrid columnWidth={200} monitorImagesLoaded={true} gutterWidth={15} gutterHeight={15}>
+          <StackGrid columnWidth={300} monitorImagesLoaded={true} gutterWidth={30} gutterHeight={30}>
             {posts.map((post, idx) => {
               return (
                 <div key={idx} className="m-1">
