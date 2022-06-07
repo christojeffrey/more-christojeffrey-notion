@@ -27,32 +27,32 @@ export const renderBlock = (block) => {
   switch (type) {
     case "paragraph":
       return (
-        <p>
+        <div className="m-1">
           <Text text={value.text} />
-        </p>
+        </div>
       );
     case "heading_1":
       return (
-        <h1>
+        <div className="m-1 text-5xl">
           <Text text={value.text} />
-        </h1>
+        </div>
       );
     case "heading_2":
       return (
-        <h2>
+        <div className="m-1 text-2xl">
           <Text text={value.text} />
-        </h2>
+        </div>
       );
     case "heading_3":
       return (
-        <h3>
+        <div className="m-1 text-xl">
           <Text text={value.text} />
-        </h3>
+        </div>
       );
     case "bulleted_list_item":
     case "numbered_list_item":
       return (
-        <li>
+        <li className="m-1">
           <Text text={value.text} />
         </li>
       );
@@ -67,7 +67,7 @@ export const renderBlock = (block) => {
     case "toggle":
       return (
         <details>
-          <summary>
+          <summary className="m-1">
             <Text text={value.text} />
           </summary>
           {value.children?.map((block) => (
@@ -87,9 +87,26 @@ export const renderBlock = (block) => {
         </figure>
       );
     case "divider":
-      return <hr key={id} />;
+      return <hr className="m-1" key={id} />;
     case "quote":
-      return <blockquote key={id}>{value.text[0].plain_text}</blockquote>;
+      return (
+        <div className="italic m-4" key={id}>
+          {value.text[0].plain_text}
+        </div>
+      );
+    case "video":
+      console.log(value);
+      return (
+        <div>
+          <iframe src={value.external.url} frameBorder="0" allow="accelerometer;  encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+        </div>
+      );
+    case "callout":
+      return (
+        <div className="m-4 p-3 bg-grey-darkest" key={id}>
+          <Text text={value.text} />
+        </div>
+      );
     default:
       return `❌ Unsupported block (${type === "unsupported" ? "unsupported by Notion API" : type})`;
   }

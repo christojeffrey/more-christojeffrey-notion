@@ -17,20 +17,23 @@ export default function Post({ page, blocks }) {
         <title>{page.properties.Name.title[0].plain_text}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <article className={styles.container}>
-        <h1 className={styles.name}>
-          <Text text={page.properties.Name.title} />
-        </h1>
-        <section>
-          {blocks.map((block) => (
-            <Fragment key={block.id}>{renderBlock(block)}</Fragment>
-          ))}
+      <div className="container mx-auto my-20">
+        <article className={styles.container}>
+          <div className="mb-5">
+            <h1 className={styles.name}>
+              <Text text={page.properties.Name.title} />
+            </h1>
+          </div>
+          <section>
+            {blocks.map((block) => (
+              <Fragment key={block.id}>{renderBlock(block)}</Fragment>
+            ))}
+          </section>
           <Link href="/">
-            <a className={styles.back}>← Go home</a>
+            <a className={styles.back}>back</a>
           </Link>
-        </section>
-      </article>
+        </article>
+      </div>
     </div>
   );
 }
