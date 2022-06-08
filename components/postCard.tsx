@@ -11,12 +11,16 @@ const PostCard = ({ post }) => {
   });
   return (
     <Link key={post.id} href={`/${post.id}`}>
-      <div className="hover:bg-black p-3 rounded-lg hover:scale-[1.1] hover:duration-75">
-        {post.cover && <img src={post.cover.file.url} alt="Cover Image" className="w-full" />}
-        <h3>
+      <div className="hover:bg-neutral-300 p-2 rounded-md hover:scale-[1.05] hover:duration-75 text-base m-1">
+        {post.cover && (
+          <div className="w-full">
+            <img src={post.cover.file.url} alt="Cover Image" />
+          </div>
+        )}
+        <div>
           <Text text={post.properties.Name.title} />
-        </h3>
-        <p className="text-grey text-xs">{date}</p>
+        </div>
+        <div className="text-neutral-500 text-xs">{date}</div>
       </div>
     </Link>
   );

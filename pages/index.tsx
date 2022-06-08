@@ -12,27 +12,31 @@ export default function Home({ posts }) {
   console.log(posts);
 
   return (
-    <div>
+    <div className="bg-neutral-100 pt-6 text-neutral-900">
       <Head>
         <title>blog</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.container}>
-        <header className={styles.header}>
-          <div className={styles.logos}></div>
-          <h1>blog</h1>
-          <p>helo! im jeff, and site ini dipake buat cerita, whatever i feel like to tell. the content here is like twitter, instagram, and, medium combined </p>
+      <main className="w-14 md:w-15 mx-auto">
+        <header className="mb-6">
+          <div className="centerx">
+            <div className="w-3/4">
+              <div className="">blog</div>
+              <div className="text-sm">helo! im jeff, and site ini dipake buat cerita, whatever i feel like to tell. the content here is like twitter, instagram, and, medium combined </div>
+            </div>
+          </div>
         </header>
 
-        <h2 className={styles.heading}>All Posts</h2>
+        <div className="text-primary-800">All Posts</div>
+        <hr className="text-neutral-400 mb-2"></hr>
         <div className={styles.posts}>
           {/* card of post in here */}
 
           <StackGrid columnWidth={300} monitorImagesLoaded={true} gutterWidth={30} gutterHeight={30}>
             {posts.map((post, idx) => {
               return (
-                <div key={idx} className="m-1">
+                <div key={idx} className="">
                   <PostCard post={post} />
                 </div>
               );

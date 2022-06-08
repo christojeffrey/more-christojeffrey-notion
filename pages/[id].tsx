@@ -12,29 +12,37 @@ export default function Post({ page, blocks }) {
     return <div />;
   }
   return (
-    <div>
+    <>
       <Head>
         <title>{page.properties.Name.title[0].plain_text}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="container mx-auto my-20">
-        <article className={styles.container}>
-          <div className="mb-5">
-            <h1 className={styles.name}>
-              <Text text={page.properties.Name.title} />
-            </h1>
+      <div className=" pt-5 pb-2 bg-neutral-100 text-neutral-900 font-medium min-h-screen">
+        {/* judul */}
+        <div className="w-full centerx">
+          <div className="w-14 md:w-15 text-left text-xl font-semibold">
+            <Text text={page.properties.Name.title} />
           </div>
-          <section>
+        </div>
+        {/* judul */}
+        {/* isi */}
+        <div className="w-full centerx">
+          <div className="w-14 md:w-15 text-xs md:text-base">
             {blocks.map((block) => (
               <Fragment key={block.id}>{renderBlock(block)}</Fragment>
             ))}
-          </section>
+          </div>
+        </div>
+        {/* isi */}
+        {/* back button */}
+        <div className="centerx text-primary-700 mt-10 mb-6 font-bold">
           <Link href="/">
-            <a className={styles.back}>back</a>
+            <a>back</a>
           </Link>
-        </article>
+        </div>
+        {/* back button */}
       </div>
-    </div>
+    </>
   );
 }
 

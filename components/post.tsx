@@ -19,7 +19,7 @@ export const Text = ({ text }) => {
   });
 };
 
-// notion itu terdiri atas block block. untuk tiap block, di render pake component renderBlock
+// notion itu terdiri atas block-block. untuk tiap block, di render pake component renderBlock
 export const renderBlock = (block) => {
   const { type, id } = block;
   const value = block[type];
@@ -27,32 +27,32 @@ export const renderBlock = (block) => {
   switch (type) {
     case "paragraph":
       return (
-        <div className="m-1">
+        <div className="">
           <Text text={value.text} />
         </div>
       );
     case "heading_1":
       return (
-        <div className="m-1 text-5xl">
+        <div className=" text-lg md:text-xl mt-7">
           <Text text={value.text} />
         </div>
       );
     case "heading_2":
       return (
-        <div className="m-1 text-2xl">
+        <div className="text-lg md:text-xl mt-5">
           <Text text={value.text} />
         </div>
       );
     case "heading_3":
       return (
-        <div className="m-1 text-xl">
+        <div className="text-base md:text-lg mt-3">
           <Text text={value.text} />
         </div>
       );
     case "bulleted_list_item":
     case "numbered_list_item":
       return (
-        <li className="m-1">
+        <li className="">
           <Text text={value.text} />
         </li>
       );
@@ -67,12 +67,14 @@ export const renderBlock = (block) => {
     case "toggle":
       return (
         <details>
-          <summary className="m-1">
+          <summary className="text-neutral-600 text-sm">
             <Text text={value.text} />
           </summary>
-          {value.children?.map((block) => (
-            <Fragment key={block.id}>{renderBlock(block)}</Fragment>
-          ))}
+          <div className="mx-6 w-3/4 text-sm">
+            {value.children?.map((block) => (
+              <Fragment key={block.id}>{renderBlock(block)}</Fragment>
+            ))}
+          </div>
         </details>
       );
     case "child_page":
@@ -81,29 +83,33 @@ export const renderBlock = (block) => {
       const src = value.type === "external" ? value.external.url : value.file.url;
       const caption = value.caption ? value.caption[0]?.plain_text : "";
       return (
-        <figure>
-          <img src={src} alt={caption} />
+        <div className="centerx my-2">
+          <img src={src} alt={caption} className="w-1/2" />
           {caption && <figcaption>{caption}</figcaption>}
-        </figure>
+        </div>
       );
     case "divider":
-      return <hr className="m-1" key={id} />;
+      return (
+        <div className="centerx">
+          <hr className="m-3 relative w-14 md:w-15 xl:w-16" key={id} />
+        </div>
+      );
     case "quote":
       return (
-        <div className="italic m-4" key={id}>
+        <div className="italic my-4 p-4 border-l-4 border-neutral-900" key={id}>
           {value.text[0].plain_text}
         </div>
       );
     case "video":
       console.log(value);
       return (
-        <div>
+        <div className="centerx">
           <iframe src={value.external.url} frameBorder="0" allow="accelerometer;  encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
         </div>
       );
     case "callout":
       return (
-        <div className="m-4 p-3 bg-grey-darkest" key={id}>
+        <div className="rounded-sm m-4 p-3 bg-neutral-300 drop-shadow-md" key={id}>
           <Text text={value.text} />
         </div>
       );

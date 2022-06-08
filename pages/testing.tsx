@@ -8,7 +8,7 @@ const Testing = () => {
   return (
     <>
       <StackGrid columnWidth={150}>
-        <div key="key1" className="bg-primary">
+        <div key="key1" className="bg-primary text">
           Item 1
         </div>
         <div key="key2" className="bg-white">
