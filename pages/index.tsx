@@ -18,7 +18,7 @@ export default function Home({ posts }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="w-14 md:w-15 mx-auto">
+      <main className="w-full md:w-15 mx-auto p-3">
         <header className="mb-6">
           <div className="centerx">
             <div className="w-3/4">
@@ -29,7 +29,7 @@ export default function Home({ posts }) {
         </header>
 
         <div className="text-primary-800">All Posts</div>
-        <hr className="text-neutral-400 mb-2"></hr>
+        <hr className="text-neutral-400 mb-2 w-full"></hr>
         <div className={styles.posts}>
           {/* card of post in here */}
 

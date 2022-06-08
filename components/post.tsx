@@ -33,19 +33,19 @@ export const renderBlock = (block) => {
       );
     case "heading_1":
       return (
-        <div className=" text-lg md:text-xl mt-7">
+        <div className=" text-base md:text-xl mt-7">
           <Text text={value.text} />
         </div>
       );
     case "heading_2":
       return (
-        <div className="text-lg md:text-xl mt-5">
+        <div className="text-base md:text-xl mt-5">
           <Text text={value.text} />
         </div>
       );
     case "heading_3":
       return (
-        <div className="text-base md:text-lg mt-3">
+        <div className="text-sm md:text-lg mt-3">
           <Text text={value.text} />
         </div>
       );
@@ -67,10 +67,10 @@ export const renderBlock = (block) => {
     case "toggle":
       return (
         <details>
-          <summary className="text-neutral-600 text-sm">
+          <summary className="text-neutral-600">
             <Text text={value.text} />
           </summary>
-          <div className="mx-6 w-3/4 text-sm">
+          <div className="mx-6 w-3/4">
             {value.children?.map((block) => (
               <Fragment key={block.id}>{renderBlock(block)}</Fragment>
             ))}
@@ -91,7 +91,7 @@ export const renderBlock = (block) => {
     case "divider":
       return (
         <div className="centerx">
-          <hr className="m-3 relative w-14 md:w-15 xl:w-16" key={id} />
+          <hr className="m-3 relative w-full xl:w-16" key={id} />
         </div>
       );
     case "quote":

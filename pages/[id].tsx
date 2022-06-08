@@ -17,17 +17,17 @@ export default function Post({ page, blocks }) {
         <title>{page.properties.Name.title[0].plain_text}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className=" pt-5 pb-2 bg-neutral-100 text-neutral-900 font-medium min-h-screen">
+      <div className="px-3 pt-5 pb-2 bg-neutral-100 text-neutral-900 font-medium min-h-screen">
         {/* judul */}
-        <div className="w-full centerx">
-          <div className="w-14 md:w-15 text-left text-xl font-semibold">
+        <div className="centerx">
+          <div className="w-full md:w-15 text-left text-xl md:font-semibold">
             <Text text={page.properties.Name.title} />
           </div>
         </div>
         {/* judul */}
         {/* isi */}
-        <div className="w-full centerx">
-          <div className="w-14 md:w-15 text-xs md:text-base">
+        <div className="centerx">
+          <div className="w-full md:w-15 text-2xs md:text-base">
             {blocks.map((block) => (
               <Fragment key={block.id}>{renderBlock(block)}</Fragment>
             ))}
@@ -35,7 +35,7 @@ export default function Post({ page, blocks }) {
         </div>
         {/* isi */}
         {/* back button */}
-        <div className="centerx text-primary-700 mt-10 mb-6 font-bold">
+        <div className="centerx text-primary-700 mt-10 mb-6 font-bold text-xs md:text-base">
           <Link href="/">
             <a>back</a>
           </Link>
