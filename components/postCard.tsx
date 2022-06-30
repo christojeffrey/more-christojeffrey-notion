@@ -26,11 +26,11 @@ const PostCardPage = ({ post }) => {
   });
   return (
     <Link key={post.id} href={`/${post.id}`}>
-      <div className="hover:bg-neutral-300 p-2 hover:scale-[1.01] hover:duration-75 text-base mx-1">
+      <div className="hover:bg-neutral-300 p-2 hover:scale-[1.01] hover:duration-75 text-base mx-1 mb-1">
         {post.cover ? (
           <div className="flex">
             <div className="basis-3/4">
-              <div className="text-lg font-bold">
+              <div className="font-bold">
                 <Text text={post.properties.Name.title} />
               </div>
               <div className="text-neutral-500 text-xs">{date}</div>
@@ -41,7 +41,7 @@ const PostCardPage = ({ post }) => {
           </div>
         ) : (
           <div>
-            <div className="text-lg font-bold">
+            <div className="font-bold">
               <Text text={post.properties.Name.title} />
             </div>
             <div className="text-neutral-500 text-xs">{date}</div>
@@ -58,11 +58,10 @@ const PostCardPageless = ({ post }) => {
   const date = new Date(post.last_edited_time).toLocaleString("en-US", {
     month: "short",
     day: "2-digit",
-    year: "numeric",
   });
   return (
     <Link key={post.id} href={`/${post.id}`}>
-      <div className="hover:bg-neutral-300 p-2 rounded-md hover:scale-[1.01] hover:duration-75 text-base m-1 my-3">
+      <div className="p-2 border-l-4 border-l-neutral-300 text-lg mb-7">
         {post.cover && (
           <div className="w-full">
             <img src={post.cover.file.url} alt="Cover Image" />

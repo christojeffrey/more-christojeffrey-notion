@@ -13,6 +13,7 @@ export const databaseId = process.env.NOTION_DATABASE_ID;
 export default function Home({ posts }) {
   const { height, width } = useWindowDimensions();
   const [columnWidth, setColumnWidth] = useState(300);
+
   useEffect(() => {
     let temp = Math.floor(width * 0.75);
     if (temp > 600) {
@@ -21,9 +22,10 @@ export default function Home({ posts }) {
     console.log("temp" + temp);
     setColumnWidth(temp);
   }, [width]);
+
   console.log(height, width);
   return (
-    <div className="bg-neutral-100 pt-6 text-neutral-900">
+    <div className="bg-neutral-100 pt-6 text-neutral-900 min-h-screen">
       <Head>
         <title>blog</title>
         <link rel="icon" href="/favicon.ico" />
