@@ -5,12 +5,23 @@ import styles from "./index.module.css";
 import { getDatabase } from "../utils/notion";
 
 import PostCard from "../components/postCard";
+import useWindowDimensions from "../hooks/useWindowDimensions";
+import { useEffect, useState } from "react";
 
 export const databaseId = process.env.NOTION_DATABASE_ID;
 
 export default function Home({ posts }) {
-  console.log(posts);
-
+  const { height, width } = useWindowDimensions();
+  const [columnWidth, setColumnWidth] = useState(300);
+  useEffect(() => {
+    let temp = Math.floor(width * 0.75);
+    if (temp > 600) {
+      temp = 600;
+    }
+    console.log("temp" + temp);
+    setColumnWidth(temp);
+  }, [width]);
+  console.log(height, width);
   return (
     <div className="bg-neutral-100 pt-6 text-neutral-900">
       <Head>
@@ -33,7 +44,7 @@ export default function Home({ posts }) {
         <div className={styles.posts}>
           {/* card of post in here */}
 
-          <StackGrid columnWidth={300} monitorImagesLoaded={true} gutterWidth={30} gutterHeight={30}>
+          <StackGrid columnWidth={columnWidth} monitorImagesLoaded={true} gutterWidth={30} gutterHeight={30}>
             {posts.map((post, idx) => {
               return (
                 <div key={idx} className="">
