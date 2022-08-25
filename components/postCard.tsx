@@ -6,14 +6,10 @@ const PostCard = ({ post }) => {
   // console.log("==================");
   // console.log("post", post.properties.publish.checkbox);
 
-  if (!post.properties.publish.checkbox) {
-    return <></>;
+  if (post.properties.pageless.checkbox) {
+    return <PostCardPageless post={post} />;
   } else {
-    if (post.properties.pageless.checkbox) {
-      return <PostCardPageless post={post} />;
-    } else {
-      return <PostCardPage post={post} />;
-    }
+    return <PostCardPage post={post} />;
   }
 };
 
@@ -73,12 +69,13 @@ const PostCardPageless = ({ post }) => {
   });
   return (
     <Link key={post.id} href={`/${post.id}`}>
-      <div className="p-2 border-l-4 border-l-neutral-300 text-base mb-7">
-        {post.cover && (
-          <div className="w-full">
+      <div className="p-2 border-l-4 border-l-neutral-300 text-base mb-1">
+        {/* {post.cover && (
+          <div className="">
+            gambar
             <img src={post.cover.file.url} alt="Cover Image" />
           </div>
-        )}
+        )} */}
         <div>
           <Text text={post.properties.Name.title} />
         </div>

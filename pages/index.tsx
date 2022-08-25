@@ -19,7 +19,7 @@ export default function Home({ posts }) {
     if (temp > 600) {
       temp = 600;
     }
-    console.log("temp" + temp);
+    // console.log("temp" + temp);
     setColumnWidth(temp);
   }, [width]);
 
@@ -65,10 +65,13 @@ export default function Home({ posts }) {
 
 export const getStaticProps = async () => {
   const database = await getDatabase(databaseId);
-
+  // filter database
+  const posts = database.filter((post: any) => {
+    return post.properties.publish.checkbox;
+  });
   return {
     props: {
-      posts: database,
+      posts,
     },
     revalidate: 1,
   };
