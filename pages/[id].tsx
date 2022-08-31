@@ -2,7 +2,6 @@ import { Fragment } from "react";
 import Head from "next/head";
 import { getDatabase, getPage, getBlocks } from "../utils/notion";
 import Link from "next/link";
-import styles from "./post.module.css";
 import { Text, renderBlock } from "../components/post";
 
 export const databaseId = process.env.NOTION_DATABASE_ID;

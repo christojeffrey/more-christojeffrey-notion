@@ -4,10 +4,13 @@ const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 });
 
-export const getDatabase = async (databaseId) => {
+export const getDatabase = async (databaseId, start_cursor = undefined) => {
   const response = await notion.databases.query({
     database_id: databaseId,
+    page_size: 100,
+    start_cursor,
   });
+
   return response.results;
 };
 

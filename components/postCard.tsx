@@ -18,12 +18,13 @@ const PostCardPage = ({ post }) => {
   post.properties.tags.multi_select.map((e) => {
     console.log("e", e);
   });
+
   const date = new Date(post.last_edited_time).toLocaleString("en-US", {
     month: "short",
     day: "2-digit",
   });
   return (
-    <Link key={post.id} href={`/${post.id}`}>
+    <Link key={post.id} href={`/${post.id}?title=${post.properties.Name.title[0].plain_text}`}>
       <div className="hover:bg-neutral-300 p-2 hover:scale-[1.01] hover:duration-75 text-base mx-1 mb-1 rounded-md">
         {post.cover ? (
           <div className="flex">
@@ -70,12 +71,12 @@ const PostCardPageless = ({ post }) => {
   return (
     <Link key={post.id} href={`/${post.id}`}>
       <div className="p-2 border-l-4 border-l-neutral-300 text-base mb-1">
-        {/* {post.cover && (
+        {post.cover && (
           <div className="">
             gambar
             <img src={post.cover.file.url} alt="Cover Image" />
           </div>
-        )} */}
+        )}
         <div>
           <Text text={post.properties.Name.title} />
         </div>
