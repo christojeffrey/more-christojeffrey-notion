@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import styles from "./post.module.css";
 
 // suatu text biasa di notion itu bisa ada yg di bold, italic, dkk. untuk tiap Text, di render menggunakan component Text.
-export const Text = ({ text }) => {
+export const NotionText = ({ text }) => {
   if (!text) {
     return null;
   }
@@ -20,7 +20,7 @@ export const Text = ({ text }) => {
 };
 
 // notion itu terdiri atas block-block. untuk tiap block, di render pake component renderBlock
-export const renderBlock = (block) => {
+export const RenderNotionBlock = ({ block }) => {
   const { type, id } = block;
   const value = block[type];
 
@@ -28,39 +28,39 @@ export const renderBlock = (block) => {
     case "paragraph":
       return (
         <div className="">
-          <Text text={value.text} />
+          <NotionText text={value.text} />
         </div>
       );
     case "heading_1":
       return (
         <div className=" text-base md:text-xl mt-7">
-          <Text text={value.text} />
+          <NotionText text={value.text} />
         </div>
       );
     case "heading_2":
       return (
         <div className="text-base md:text-xl mt-5">
-          <Text text={value.text} />
+          <NotionText text={value.text} />
         </div>
       );
     case "heading_3":
       return (
         <div className="text-sm md:text-lg mt-3">
-          <Text text={value.text} />
+          <NotionText text={value.text} />
         </div>
       );
     case "bulleted_list_item":
     case "numbered_list_item":
       return (
         <li className="">
-          <Text text={value.text} />
+          <NotionText text={value.text} />
         </li>
       );
     case "to_do":
       return (
         <div>
           <label htmlFor={id}>
-            <input type="checkbox" id={id} defaultChecked={value.checked} /> <Text text={value.text} />
+            <input type="checkbox" id={id} defaultChecked={value.checked} /> <NotionText text={value.text} />
           </label>
         </div>
       );
@@ -68,11 +68,11 @@ export const renderBlock = (block) => {
       return (
         <details>
           <summary className="text-neutral-600">
-            <Text text={value.text} />
+            <NotionText text={value.text} />
           </summary>
           <div className="mx-6 w-3/4">
             {value.children?.map((block) => (
-              <Fragment key={block.id}>{renderBlock(block)}</Fragment>
+              <RenderNotionBlock block={block} key={block.id} />
             ))}
           </div>
         </details>
@@ -110,10 +110,10 @@ export const renderBlock = (block) => {
     case "callout":
       return (
         <div className="rounded-sm m-4 p-3 bg-neutral-300 drop-shadow-md" key={id}>
-          <Text text={value.text} />
+          <NotionText text={value.text} />
         </div>
       );
     default:
-      return `❌ Unsupported block (${type === "unsupported" ? "unsupported by Notion API" : type})`;
+      return <div>`❌ Unsupported block (${type === "unsupported" ? "unsupported by Notion API" : type})`</div>;
   }
 };

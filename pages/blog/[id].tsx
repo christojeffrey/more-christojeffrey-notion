@@ -1,8 +1,7 @@
-import { Fragment } from "react";
 import Head from "next/head";
-import { getDatabase, getPage, getBlocks } from "../utils/notion";
+import { getDatabase, getPage, getBlocks } from "../../utils/notion";
 import Link from "next/link";
-import { Text, renderBlock } from "../components/post";
+import { NotionText, RenderNotionBlock } from "../../components/post";
 
 export const databaseId = process.env.NOTION_DATABASE_ID;
 
@@ -20,7 +19,7 @@ export default function Post({ page, blocks }) {
         {/* judul */}
         <div className="centerx">
           <div className="w-full md:w-15 text-left text-xl md:font-semibold">
-            <Text text={page.properties.Name.title} />
+            <NotionText text={page.properties.Name.title} />
           </div>
         </div>
         {/* judul */}
@@ -28,7 +27,7 @@ export default function Post({ page, blocks }) {
         <div className="centerx">
           <div className="w-full md:w-15 text-2xs md:text-base">
             {blocks.map((block) => (
-              <Fragment key={block.id}>{renderBlock(block)}</Fragment>
+              <RenderNotionBlock block={block} key={block.id} />
             ))}
           </div>
         </div>
