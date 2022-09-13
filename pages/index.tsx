@@ -1,12 +1,4 @@
 import Head from "next/head";
-import StackGrid from "react-stack-grid";
-
-import { getDatabase } from "../utils/notion";
-
-import PostCard from "../components/postCard";
-import useWindowDimensions from "../hooks/useWindowDimensions";
-import { useEffect, useState } from "react";
-import Navigation from "../components/Navigation";
 
 export const databaseId = process.env.NOTION_DATABASE_ID;
 

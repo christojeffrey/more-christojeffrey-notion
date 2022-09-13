@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-import { getDatabase } from "../../utils/notion";
+import { getNotionDatabase } from "../../utils/notion";
 import Link from "next/link";
 import { NotionText } from "../../components/post";
 
@@ -41,7 +41,7 @@ const Blog = ({ posts }) => {
 };
 
 export const getStaticProps = async () => {
-  const posts = await getDatabase(databaseId, undefined, {
+  const posts = await getNotionDatabase(databaseId, undefined, {
     and: [
       {
         property: "pageless",

@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { getDatabase, getPage, getBlocks } from "../../utils/notion";
+import { getNotionDatabase, getNotionPage, getNotionBlocks } from "../../utils/notion";
 import Link from "next/link";
 import { NotionText, RenderNotionBlock } from "../../components/post";
 
@@ -45,7 +45,7 @@ export default function Post({ page, blocks }) {
 }
 
 export const getStaticPaths = async () => {
-  const database = await getDatabase(databaseId);
+  const database = await getNotionDatabase(databaseId);
   return {
     paths: database.map((page) => ({ params: { id: page.id } })),
     fallback: true,
@@ -54,8 +54,8 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async (context) => {
   const { id } = context.params;
-  const page = await getPage(id);
-  const blocks = await getBlocks(id);
+  const page = await getNotionPage(id);
+  const blocks = await getNotionBlocks(id);
 
   // Retrieve block children for nested blocks (one level deep), for example toggle blocks
   // https://developers.notion.com/docs/working-with-page-content#reading-nested-blocks
@@ -65,7 +65,7 @@ export const getStaticProps = async (context) => {
       .map(async (block) => {
         return {
           id: block.id,
-          children: await getBlocks(block.id),
+          children: await getNotionBlocks(block.id),
         };
       })
   );

@@ -3,7 +3,7 @@ import Link from "next/link";
 const Navigation = () => {
   const linkOption = [
     {
-      text: "Home",
+      text: "home",
       link: "/",
     },
     {

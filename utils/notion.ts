@@ -4,7 +4,7 @@ const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 });
 
-export const getDatabase = async (databaseId, start_cursor = undefined, filter = undefined) => {
+export const getNotionDatabase = async (databaseId, start_cursor = undefined, filter = undefined) => {
   const response = await notion.databases.query({
     database_id: databaseId,
     page_size: 100,
@@ -15,12 +15,12 @@ export const getDatabase = async (databaseId, start_cursor = undefined, filter =
   return response.results;
 };
 
-export const getPage = async (pageId) => {
+export const getNotionPage = async (pageId) => {
   const response = await notion.pages.retrieve({ page_id: pageId });
   return response;
 };
 
-export const getBlocks = async (blockId) => {
+export const getNotionBlocks = async (blockId) => {
   const blocks = [];
   let cursor;
   while (true) {

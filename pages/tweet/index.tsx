@@ -1,30 +1,12 @@
 import Head from "next/head";
-import StackGrid from "react-stack-grid";
 
-import { getDatabase } from "../../utils/notion";
+import { getNotionDatabase } from "../../utils/notion";
 
-import PostCard from "../../components/postCard";
-import useWindowDimensions from "../../hooks/useWindowDimensions";
-import { useEffect, useState } from "react";
-import Navigation from "../../components/Navigation";
-import Link from "next/link";
 import { NotionText } from "../../components/post";
 
 export const databaseId = process.env.NOTION_DATABASE_ID;
 
 const Blog = ({ posts }) => {
-  const { height, width } = useWindowDimensions();
-
-  const [columnWidth, setColumnWidth] = useState(300);
-
-  useEffect(() => {
-    let temp = Math.floor(width * 0.75);
-    if (temp > 600) {
-      temp = 600;
-    }
-    // console.log("temp" + temp);
-    setColumnWidth(temp);
-  }, [width]);
   return (
     <div className="flex  justify-center">
       <Head>
@@ -59,7 +41,7 @@ const Blog = ({ posts }) => {
 };
 
 export const getStaticProps = async () => {
-  const posts = await getDatabase(databaseId, undefined, {
+  const posts = await getNotionDatabase(databaseId, undefined, {
     and: [
       {
         property: "pageless",
