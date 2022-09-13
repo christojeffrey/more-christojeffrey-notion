@@ -32,21 +32,24 @@ const Blog = ({ posts }) => {
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
       <div className="w-1/2">
-        <h1>Tweet</h1>
+        <div id="hero-container" className="h-[30vh] flex items-center justify-center">
+          <div>
+            <h1>tweet</h1>
+            <div>shorter than the shortest blog</div>
+          </div>
+        </div>
         <div className="text-primary-800">All Posts</div>
         <hr className="text-neutral-400 mb-2 w-full"></hr>
         <div id="cards of post">
           {/* card of post in here */}
 
-          <StackGrid columnWidth={columnWidth} monitorImagesLoaded={true} gutterWidth={30} gutterHeight={30}>
-            {posts.map((post, idx) => {
-              return (
-                <div key={idx}>
-                  <PostCardPageless post={post} />
-                </div>
-              );
-            })}
-          </StackGrid>
+          {posts.map((post, idx) => {
+            return (
+              <div key={idx}>
+                <PostCardPageless post={post} />
+              </div>
+            );
+          })}
 
           {/* card of post in here */}
         </div>
@@ -56,11 +59,23 @@ const Blog = ({ posts }) => {
 };
 
 export const getStaticProps = async () => {
-  const database = await getDatabase(databaseId);
-  // filter database
-  const posts = database.filter((post: any) => {
-    return post.properties.publish.checkbox && post.properties.pageless.checkbox;
+  const posts = await getDatabase(databaseId, undefined, {
+    and: [
+      {
+        property: "pageless",
+        checkbox: {
+          equals: true,
+        },
+      },
+      {
+        property: "publish",
+        checkbox: {
+          equals: true,
+        },
+      },
+    ],
   });
+
   return {
     props: {
       posts,
@@ -80,7 +95,7 @@ const PostCardPageless = ({ post }) => {
   });
   return (
     // <Link key={post.id} href={`/${post.id}`}>
-    <div className="p-2 border-l-4 border-l-neutral-300 text-base mb-1">
+    <div className="p-2 my-5 border-b-2 border-b-neutral-300 text-base mb-1">
       {post.cover && (
         <div className="">
           gambar

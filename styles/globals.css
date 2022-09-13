@@ -1,8 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* /node_modules/react-grid-layout/css/styles.css */
-/* /node_modules/react-resizable/css/styles.css */
+
 
 @layer base {
   body {

@@ -1,30 +1,12 @@
 import Head from "next/head";
-import StackGrid from "react-stack-grid";
 
 import { getDatabase } from "../../utils/notion";
-
-import PostCard from "../../components/postCard";
-import useWindowDimensions from "../../hooks/useWindowDimensions";
-import { useEffect, useState } from "react";
-import Navigation from "../../components/Navigation";
 import Link from "next/link";
 import { NotionText } from "../../components/post";
 
 export const databaseId = process.env.NOTION_DATABASE_ID;
 
 const Blog = ({ posts }) => {
-  const { height, width } = useWindowDimensions();
-
-  const [columnWidth, setColumnWidth] = useState(300);
-
-  useEffect(() => {
-    let temp = Math.floor(width * 0.75);
-    if (temp > 600) {
-      temp = 600;
-    }
-    // console.log("temp" + temp);
-    setColumnWidth(temp);
-  }, [width]);
   return (
     <div className="flex  justify-center">
       <Head>
@@ -32,21 +14,24 @@ const Blog = ({ posts }) => {
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
       <div className="w-1/2">
-        <h1>Blog</h1>
+        <div id="hero-container" className="h-[30vh] flex items-center justify-center">
+          <div>
+            <h1>Blog</h1>
+            <div>probably texts I have taken from somewhere else and claim it to be mine</div>
+          </div>
+        </div>
         <div className="text-primary-800">All Posts</div>
         <hr className="text-neutral-400 mb-2 w-full"></hr>
         <div id="cards of post">
           {/* card of post in here */}
 
-          <StackGrid columnWidth={columnWidth} monitorImagesLoaded={true} gutterWidth={30} gutterHeight={30}>
-            {posts.map((post, idx) => {
-              return (
-                <div key={idx}>
-                  <PostCardPage post={post} />
-                </div>
-              );
-            })}
-          </StackGrid>
+          {posts.map((post, idx) => {
+            return (
+              <div key={idx}>
+                <PostCardPage post={post} />
+              </div>
+            );
+          })}
 
           {/* card of post in here */}
         </div>
@@ -56,11 +41,23 @@ const Blog = ({ posts }) => {
 };
 
 export const getStaticProps = async () => {
-  const database = await getDatabase(databaseId);
-  // filter database
-  const posts = database.filter((post: any) => {
-    return post.properties.publish.checkbox && !post.properties.pageless.checkbox;
+  const posts = await getDatabase(databaseId, undefined, {
+    and: [
+      {
+        property: "pageless",
+        checkbox: {
+          equals: false,
+        },
+      },
+      {
+        property: "publish",
+        checkbox: {
+          equals: true,
+        },
+      },
+    ],
   });
+
   return {
     props: {
       posts,
@@ -72,11 +69,6 @@ export const getStaticProps = async () => {
 export default Blog;
 
 const PostCardPage = ({ post }) => {
-  // console.log("==================");
-  post.properties.tags.multi_select.map((e) => {
-    console.log("e", e);
-  });
-
   const date = new Date(post.last_edited_time).toLocaleString("en-US", {
     month: "short",
     day: "2-digit",
@@ -91,11 +83,11 @@ const PostCardPage = ({ post }) => {
         },
       }}
     >
-      <div className="hover:bg-neutral-300 p-2 hover:scale-[1.01] hover:duration-75 text-base mx-1 mb-1 rounded-md">
+      <div className="hover:bg-neutral-300 px-2 py-6 hover:scale-[1.01] hover:duration-75 text-base mx-1 mb-1 rounded-md">
         {post.cover ? (
           <div className="flex">
             <div className="basis-3/4">
-              <div className="">
+              <div className="font-bold">
                 <NotionText text={post.properties.Name.title} />
               </div>
               <div className="flex">
@@ -111,7 +103,7 @@ const PostCardPage = ({ post }) => {
           </div>
         ) : (
           <div>
-            <div className="">
+            <div className="font-bold">
               <NotionText text={post.properties.Name.title} />
             </div>
             <div className="flex">
