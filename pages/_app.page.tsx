@@ -1,4 +1,4 @@
-import Navigation from "../components/Navigation";
+import Navigation from "../components/Navigation/Navigation";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {

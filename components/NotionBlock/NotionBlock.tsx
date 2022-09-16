@@ -1,30 +1,6 @@
-import { Fragment } from "react";
-import styles from "./post.module.css";
-
-// suatu text biasa di notion itu bisa ada yg di bold, italic, dkk. untuk tiap Text, di render menggunakan component Text.
-export const NotionText = ({ text }) => {
-  if (!text) {
-    return null;
-  }
-  return text.map((value, index) => {
-    const {
-      annotations: { bold, code, color, italic, strikethrough, underline },
-      text,
-    } = value;
-    return (
-      <span
-        key={index}
-        className={[bold ? styles.bold : "", code ? styles.code : "", italic ? styles.italic : "", strikethrough ? styles.strikethrough : "", underline ? styles.underline : ""].join(" ")}
-        style={color !== "default" ? { color } : {}}
-      >
-        {text.link ? <a href={text.link.url}>{text.content}</a> : text.content}
-      </span>
-    );
-  });
-};
-
+import { NotionText } from "../NotionText/NotionText";
 // notion itu terdiri atas block-block. untuk tiap block, di render pake component renderBlock
-export const RenderNotionBlock = ({ block }) => {
+export const NotionBlock = ({ block }) => {
   const { type, id } = block;
   const value = block[type];
 
@@ -76,7 +52,7 @@ export const RenderNotionBlock = ({ block }) => {
           </summary>
           <div className="mx-6 w-3/4">
             {value.children?.map((block) => (
-              <RenderNotionBlock block={block} key={block.id} />
+              <NotionBlock block={block} key={block.id} />
             ))}
           </div>
         </details>
@@ -121,3 +97,5 @@ export const RenderNotionBlock = ({ block }) => {
       return <div>`❌ Unsupported block (${type === "unsupported" ? "unsupported by Notion API" : type})`</div>;
   }
 };
+
+export default NotionBlock;

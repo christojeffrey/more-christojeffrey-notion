@@ -1,7 +1,9 @@
 import Head from "next/head";
 import { getNotionDatabase, getNotionPage, getNotionBlocks } from "../../utils/notion";
 import Link from "next/link";
-import { NotionText, RenderNotionBlock } from "../../components/post";
+
+import NotionText from "../../components/NotionText/NotionText";
+import NotionBlock from "../../components/NotionBlock/NotionBlock";
 
 export const databaseId = process.env.NOTION_DATABASE_ID;
 
@@ -15,7 +17,7 @@ export default function Post({ page, blocks }) {
         <title>{page.properties.Name.title[0].plain_text}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="px-3 pt-5 pb-2 bg-neutral-100 text-neutral-900 font-medium min-h-screen">
+      <div className="px-3 pt-5 pb-2 text-neutral-900 font-medium min-h-screen">
         {/* judul */}
         <div className="centerx">
           <div className="w-full md:w-15 text-left text-xl md:font-semibold">
@@ -27,7 +29,7 @@ export default function Post({ page, blocks }) {
         <div className="centerx">
           <div className="w-full md:w-15 text-2xs md:text-base">
             {blocks.map((block) => (
-              <RenderNotionBlock block={block} key={block.id} />
+              <NotionBlock block={block} key={block.id} />
             ))}
           </div>
         </div>

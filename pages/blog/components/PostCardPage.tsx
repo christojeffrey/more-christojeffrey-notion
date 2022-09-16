@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { NotionText } from "../../../components/post";
+import NotionText from "../../../components/NotionText/NotionText";
 
 const PostCardPage = ({ post }) => {
   const date = new Date(post.last_edited_time).toLocaleString("en-US", {

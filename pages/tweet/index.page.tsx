@@ -2,7 +2,7 @@ import Head from "next/head";
 
 import { getNotionDatabase } from "../../utils/notion";
 
-import { NotionText } from "../../components/post";
+import NotionText from "../../components/NotionText/NotionText";
 
 export const databaseId = process.env.NOTION_DATABASE_ID;
 
