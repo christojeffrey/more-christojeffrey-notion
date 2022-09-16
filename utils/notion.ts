@@ -7,7 +7,7 @@ const notion = new Client({
 export const getNotionDatabase = async (databaseId, start_cursor = undefined, filter = undefined) => {
   const response = await notion.databases.query({
     database_id: databaseId,
-    page_size: 100,
+    page_size: 10,
     start_cursor,
     filter,
   });

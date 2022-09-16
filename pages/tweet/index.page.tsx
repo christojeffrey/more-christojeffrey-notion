@@ -40,7 +40,7 @@ const Blog = ({ posts }) => {
   );
 };
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
   const posts = await getNotionDatabase(databaseId, undefined, {
     and: [
       {
@@ -62,7 +62,6 @@ export const getStaticProps = async () => {
     props: {
       posts,
     },
-    revalidate: 1,
   };
 };
 

@@ -24,7 +24,7 @@ const Navigation = () => {
       <div id="link to other content" className="flex justify-center">
         {linkOption.map((item, idx) => {
           return (
-            <div className="mx-2 text-xs">
+            <div key={idx} className="mx-2 text-xs">
               <Link href={item.link} key={idx}>
                 <div className="text-primary-700 mr-3 hover:text-primary-900">{item.text}</div>
               </Link>
