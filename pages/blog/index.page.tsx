@@ -47,11 +47,11 @@ const Blog = () => {
         <title>blog</title>
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
-      <div className="w-1/2">
-        <div id="hero-container" className="h-[30vh] flex items-center justify-center">
+      <div className="w-11/12 md:w-1/2">
+        <div id="hero-container" className="md:h-[30vh] flex items-center justify-center">
           <div>
             <h1>Blog</h1>
-            <div>probably texts I have taken from somewhere else and claim it to be mine</div>
+            <div>texts I have taken ... from somewhere else</div>
           </div>
         </div>
         <div className="text-primary-800">All Posts</div>
