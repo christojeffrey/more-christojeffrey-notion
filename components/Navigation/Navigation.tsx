@@ -1,7 +1,8 @@
 import Link from "next/link";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import { slide as Menu } from "react-burger-menu";
-var styles = {
+import { useEffect, useState } from "react";
+let styles = {
   bmBurgerButton: {
     position: "fixed",
     width: "36px",
@@ -66,26 +67,11 @@ const Navigation = () => {
     },
   ];
   // check is mobile
+
   const { width } = useWindowDimensions();
-  console.log("width", width);
-  if (width < 768) {
-    console.log("mobile!");
-    return (
-      <>
-        <Menu styles={styles} isOpen={false} right>
-          <div className="mx-2 text-xs flex">
-            {linkOption.map((item, idx) => {
-              return (
-                <Link href={item.link} key={idx}>
-                  <div className="text-primary-700 mr-3 hover:text-primary-900">{item.text}</div>
-                </Link>
-              );
-            })}
-          </div>
-        </Menu>
-      </>
-    );
-  } else {
+  const isMobile = width <= 768;
+
+  if (!isMobile) {
     return (
       <div className="w-full pt-4 fade-in">
         <div id="link to other content" className="flex justify-center">
@@ -103,6 +89,22 @@ const Navigation = () => {
           <a href="https://christojeffrey.com">christojeffrey.com</a>
         </div>
       </div>
+    );
+  } else {
+    return (
+      <>
+        <Menu styles={styles} isOpen={false} right>
+          <div className="mx-2 text-xs flex">
+            {linkOption.map((item, idx) => {
+              return (
+                <Link href={item.link} key={idx}>
+                  <div className="text-primary-700 mr-3 hover:text-primary-900">{item.text}</div>
+                </Link>
+              );
+            })}
+          </div>
+        </Menu>
+      </>
     );
   }
 };
