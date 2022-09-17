@@ -8,7 +8,7 @@ export const databaseId = process.env.NOTION_DATABASE_ID;
 
 const Blog = ({ posts }) => {
   return (
-    <div className="flex  justify-center">
+    <div className="flex justify-center fade-in">
       <Head>
         <title>tweet</title>
         {/* <link rel="icon" href="/favicon.ico" /> */}

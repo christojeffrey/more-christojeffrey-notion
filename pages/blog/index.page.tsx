@@ -8,9 +8,14 @@ export const databaseId = process.env.NOTION_DATABASE_ID;
 import useSWR from "swr";
 import { useState, useEffect } from "react";
 
+import Fade from "react-reveal/Fade";
+// import Skeleton from "react-loading-skeleton";
+// import "react-loading-skeleton/dist/skeleton.css";
+
 const fetcher = async (args: any) => {
   return await fetch("/api/notion/blog/" + args).then((res) => res.json());
 };
+
 const Blog = () => {
   const [posts, setPosts] = useState([]);
   const [lastNotionCardId, setLastNotionCardId] = useState("start");
@@ -20,23 +25,24 @@ const Blog = () => {
   useEffect(() => {
     if (tenPosts) {
       // get everything second to last from tenPosts slice
-      setPosts([...posts, ...tenPosts.slice(1)]);
       if (tenPosts.length === 1) {
         setHaveMoreCard(false);
+        setPosts([...posts, ...tenPosts]);
+      } else {
+        setPosts([...posts, ...tenPosts.slice(0, -1)]);
       }
     }
   }, [tenPosts]);
 
   const loadMoreCard = () => {
-    setLastNotionCardId(posts[posts.length - 1].id);
+    setLastNotionCardId(tenPosts[tenPosts.length - 1].id);
   };
 
   if (error) {
     return <div>error</div>;
   }
-
   return (
-    <div className="flex  justify-center">
+    <div className="flex justify-center fade-in">
       <Head>
         <title>blog</title>
         {/* <link rel="icon" href="/favicon.ico" /> */}
@@ -52,12 +58,23 @@ const Blog = () => {
         <hr className="text-neutral-400 mb-2 w-full"></hr>
         <div id="cards of post">
           {/* card of post in here */}
-          <InfiniteScroll hasMore={haveMoreCard} dataLength={posts.length} next={loadMoreCard} loader={<h4>loading...</h4>} endMessage={<h4>no more posts</h4>}>
+          <InfiniteScroll
+            hasMore={haveMoreCard}
+            dataLength={posts.length}
+            next={loadMoreCard}
+            loader={
+              <h4>
+                loading...
+                {/* <Skeleton count={10} /> */}
+              </h4>
+            }
+            endMessage={<h4>no more posts</h4>}
+          >
             {posts.map((post, idx) => {
               return (
-                <div key={idx}>
-                  <PostCardPage post={post} />
-                </div>
+                <Fade>
+                  <PostCardPage post={post} key={idx} />
+                </Fade>
               );
             })}
           </InfiniteScroll>

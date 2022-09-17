@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
   body {
     @apply text-base;
@@ -45,3 +44,18 @@ a {
 /* h1 {
   font-weight: 800;
 } */
+
+.fade-in {
+  animation: fadeInAnimation ease 0.2s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

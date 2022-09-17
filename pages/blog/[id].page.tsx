@@ -17,7 +17,7 @@ export default function Post({ page, blocks }) {
         <title>{page.properties.Name.title[0].plain_text}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="px-3 pt-5 pb-2 text-neutral-900 font-medium min-h-screen">
+      <div className="px-3 pt-5 pb-2 text-neutral-900 font-medium min-h-screen fade-in">
         {/* judul */}
         <div className="centerx">
           <div className="w-full md:w-15 text-left text-xl md:font-semibold">
