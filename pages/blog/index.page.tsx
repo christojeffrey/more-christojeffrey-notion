@@ -13,7 +13,7 @@ import Fade from "react-reveal/Fade";
 // import "react-loading-skeleton/dist/skeleton.css";
 
 const fetcher = async (args: any) => {
-  return await fetch("/api/notion/blog/" + args).then((res) => res.json());
+  return await fetch("/api/notion/blog/10/" + args).then((res) => res.json());
 };
 
 const Blog = () => {

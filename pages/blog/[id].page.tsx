@@ -2,15 +2,26 @@ import Head from "next/head";
 import { getNotionDatabase, getNotionPage, getNotionBlocks } from "../../utils/notion";
 import Link from "next/link";
 
+import { useRouter } from "next/router";
+
 import NotionText from "../../components/NotionText/NotionText";
 import NotionBlock from "../../components/NotionBlock/NotionBlock";
+import useSWR from "swr";
+import PostCardPage from "./components/PostCardPage";
 
 export const databaseId = process.env.NOTION_DATABASE_ID;
 
-export default function Post({ page, blocks }) {
+const fetcher = async (args: any) => {
+  return await fetch("/api/notion/blog/3/" + args).then((res) => res.json());
+};
+
+export default function Post({ id, page, blocks }) {
   if (!page || !blocks) {
     return <div />;
   }
+  const router = useRouter();
+  // const { data: threePosts, error } = useSWR(id, fetcher);
+
   return (
     <>
       <Head>
@@ -35,12 +46,20 @@ export default function Post({ page, blocks }) {
         </div>
         {/* isi */}
         {/* back button */}
-        <div className="centerx text-primary-700 mt-10 mb-6 font-bold text-xs md:text-base">
-          <Link href="/">
-            <a>back</a>
-          </Link>
+        <div id="back-button" className="centerx text-primary-700 mt-10 mb-6 font-bold text-xs md:text-base">
+          <a
+            onClick={() => {
+              router.back();
+            }}
+          >
+            back
+          </a>
         </div>
         {/* back button */}
+        {/* {threePosts &&
+          threePosts.map((post, idx) => {
+            return <PostCardPage post={post} key={idx} />;
+          })} */}
       </div>
     </>
   );
@@ -81,6 +100,7 @@ export const getStaticProps = async (context) => {
 
   return {
     props: {
+      id,
       page,
       blocks: blocksWithChildren,
     },

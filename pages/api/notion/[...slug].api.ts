@@ -3,11 +3,12 @@ import { getNotionDatabase } from "../../../utils/notion";
 export const databaseId = process.env.NOTION_DATABASE_ID;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
+  // tweet-or-blog/:size/:id-or-start
   console.log("testing im called!");
   const { slug } = req.query;
   console.log("slug", slug);
 
-  const posts = await getNotionDatabase(databaseId, slug[1] === "start" ? undefined : slug[1], {
+  const posts = await getNotionDatabase(databaseId, slug[2] === "start" ? undefined : slug[2], Number(slug[1]), {
     and: [
       {
         property: "pageless",

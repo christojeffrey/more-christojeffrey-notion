@@ -41,7 +41,7 @@ const Blog = ({ posts }) => {
 };
 
 export const getServerSideProps = async () => {
-  const posts = await getNotionDatabase(databaseId, undefined, {
+  const posts = await getNotionDatabase(databaseId, undefined, "10", {
     and: [
       {
         property: "pageless",

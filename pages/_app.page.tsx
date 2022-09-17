@@ -5,6 +5,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Navigation />
+      <div id="padding for navigation. Navigation has absolute position" className="h-[50px]" />
       <Component {...pageProps} />
     </>
   );
