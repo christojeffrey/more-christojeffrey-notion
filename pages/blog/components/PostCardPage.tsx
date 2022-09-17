@@ -2,47 +2,43 @@ import Link from "next/link";
 import NotionText from "../../../components/NotionText/NotionText";
 
 const PostCardPage = ({ post }) => {
+  // console.log("post", post);
   let date = new Date(post.last_edited_time);
   let dateString: String;
+
+  // 7 days ago
+  let today = new Date();
 
   // if today, dateString = "Today"
   // if this week, dateString = "this week"
   // if this month, dateString = "this month"
   // else, show date
+  console.log("date.getTime()");
+  // console.log(date.getTime());
+  // console.log("check", date.getTime() < sevenDaysAgo.getTime());
   if (date.toDateString() === new Date().toDateString()) {
     dateString = "Today";
     // if yesterday
-  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 1)).toDateString()) {
+  } else if (date.toDateString() === new Date(new Date().setDate(today.getDate() - 1)).toDateString()) {
     dateString = "Yesterday";
-  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 2)).toDateString()) {
+  } else if (date.toDateString() === new Date(new Date().setDate(today.getDate() - 2)).toDateString()) {
     dateString = "2 days ago";
-  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 3)).toDateString()) {
-    dateString = "3 days ago";
-  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 4)).toDateString()) {
-    dateString = "4 days ago";
-  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 5)).toDateString()) {
-    dateString = "5 days ago";
-  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 6)).toDateString()) {
-    dateString = "6 days ago";
-  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 7)).toDateString()) {
-    dateString = "1 week ago";
-  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 14)).toDateString()) {
-    dateString = "2 weeks ago";
-  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 21)).toDateString()) {
-    dateString = "3 weeks ago";
-  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 28)).toDateString()) {
-    dateString = "4 weeks ago";
-  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 35)).toDateString()) {
-    dateString = "5 weeks ago";
-  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 42)).toDateString()) {
-    dateString = "6 weeks ago";
-  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 49)).toDateString()) {
-    dateString = "7 weeks ago";
   } else {
-    dateString = date.toLocaleString("en-US", {
-      month: "short",
-      day: "2-digit",
-    });
+    // check how many days ago
+    let daysAgo = Math.floor((today.getTime() - date.getTime()) / (1000 * 3600 * 24));
+    console.log("daysAgo", daysAgo);
+    if (daysAgo <= 7) {
+      dateString = "this week";
+    } else if (daysAgo <= 28) {
+      // how many weeks ago
+      let weeksAgo = Math.floor(daysAgo / 7);
+      dateString = `${weeksAgo} week${weeksAgo > 1 ? "s" : ""} ago`;
+    } else {
+      dateString = date.toLocaleString("en-US", {
+        month: "short",
+        day: "2-digit",
+      });
+    }
   }
 
   return (
@@ -79,7 +75,7 @@ const PostCardPage = ({ post }) => {
               <NotionText text={post.properties.Name.title} />
             </div>
             <div className="flex">
-              <div className="text-neutral-500 text-xs basis-1/3 md:basis-1/6">{dateString}</div>
+              <div className="text-neutral-500 text-xs basis-2/5 sm:basis-1/4">{dateString}</div>
               {post.properties.tags.multi_select.map((e: any, index: any) => {
                 return (
                   <div key={index} className="text-3xs text-neutral-500 border-2 rounded-full px-1 mx-1 border-neutral-300">
