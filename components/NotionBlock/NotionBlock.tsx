@@ -93,9 +93,47 @@ export const NotionBlock = ({ block }) => {
           <NotionText text={value.text} />
         </div>
       );
+    case "code":
+      return (
+        <div>
+          <NotionCode text={value.text} />
+        </div>
+      );
     default:
       return <div>`❌ Unsupported block (${type === "unsupported" ? "unsupported by Notion API" : type})`</div>;
   }
 };
+const NotionCode = ({ text }) => {
+  const lines = text[0].plain_text.split("\n");
 
+  return (
+    <div className="m-5">
+      <div className="relative font-mono bg-grey-darker text-white p-5 rounded-md">
+        {lines.map((line, index) => {
+          const tabs = line.split("\t");
+          return (
+            <div key={index} className="flex">
+              <span className=" text-neutral-200 mr-4">{index + 1}</span>
+              {tabs.map((tab, index) => {
+                return (
+                  <span key={index} className="ml-[2rem]">
+                    {tab}
+                  </span>
+                );
+              })}
+            </div>
+          );
+        })}
+        <div
+          className="absolute top-4 right-4 text-primary-200 hover:text-primary-500 cursor-pointer"
+          onClick={() => {
+            navigator.clipboard.writeText(text[0].plain_text);
+          }}
+        >
+          copy
+        </div>
+      </div>
+    </div>
+  );
+};
 export default NotionBlock;

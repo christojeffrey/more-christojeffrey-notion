@@ -28,9 +28,9 @@ export default function Post({ id, page, blocks }) {
         <title>{page.properties.Name.title[0].plain_text}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="px-3 pt-5 pb-2 text-neutral-900 font-medium min-h-screen fade-in">
+      <div className="px-3 pt-5 pb-2 text-neutral-900  min-h-screen fade-in">
         {/* judul */}
-        <div className="centerx">
+        <div className="centerx font-medium">
           <div className="w-full md:w-15 text-left text-xl md:font-semibold">
             <NotionText text={page.properties.Name.title} />
           </div>
