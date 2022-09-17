@@ -11,10 +11,33 @@ const PostCardPage = ({ post }) => {
   // else, show date
   if (date.toDateString() === new Date().toDateString()) {
     dateString = "Today";
-  } else if (date.toDateString() === new Date().toDateString()) {
-    dateString = "this week";
-  } else if (date.toDateString() === new Date().toDateString()) {
-    dateString = "this month";
+    // if yesterday
+  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 1)).toDateString()) {
+    dateString = "Yesterday";
+  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 2)).toDateString()) {
+    dateString = "2 days ago";
+  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 3)).toDateString()) {
+    dateString = "3 days ago";
+  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 4)).toDateString()) {
+    dateString = "4 days ago";
+  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 5)).toDateString()) {
+    dateString = "5 days ago";
+  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 6)).toDateString()) {
+    dateString = "6 days ago";
+  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 7)).toDateString()) {
+    dateString = "1 week ago";
+  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 14)).toDateString()) {
+    dateString = "2 weeks ago";
+  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 21)).toDateString()) {
+    dateString = "3 weeks ago";
+  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 28)).toDateString()) {
+    dateString = "4 weeks ago";
+  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 35)).toDateString()) {
+    dateString = "5 weeks ago";
+  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 42)).toDateString()) {
+    dateString = "6 weeks ago";
+  } else if (date.toDateString() === new Date(new Date().setDate(new Date().getDate() - 49)).toDateString()) {
+    dateString = "7 weeks ago";
   } else {
     dateString = date.toLocaleString("en-US", {
       month: "short",
