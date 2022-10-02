@@ -18,23 +18,32 @@ const blogFetcher = async (args: any) => {
 };
 
 const Blog = () => {
+  const [isInitial, setIsInitial] = useState(true);
+
   let cachedBlogPosts;
-  if (typeof window !== "undefined") {
-    cachedBlogPosts = JSON.parse(localStorage.getItem("blogPosts"));
-    console.log("cachedBlogPosts", cachedBlogPosts);
-  }
   let cachedHaveMoreBlogPosts;
-  if (typeof window !== "undefined") {
-    cachedHaveMoreBlogPosts = JSON.parse(localStorage.getItem("haveMoreBlogPosts"));
-    if (cachedHaveMoreBlogPosts) {
-    } else {
+  if (isInitial) {
+    console.log("============================");
+    if (typeof window !== "undefined") {
+      cachedBlogPosts = JSON.parse(localStorage.getItem("blogPosts"));
+      console.log("cachedBlogPosts", cachedBlogPosts);
     }
+    if (typeof window !== "undefined") {
+      cachedHaveMoreBlogPosts = JSON.parse(localStorage.getItem("haveMoreBlogPosts"));
+      console.log("cachedHaveMoreBlogPosts", cachedHaveMoreBlogPosts);
+      if (cachedHaveMoreBlogPosts === null) {
+        cachedHaveMoreBlogPosts = true;
+      } else {
+        cachedHaveMoreBlogPosts = JSON.parse(cachedHaveMoreBlogPosts);
+      }
+    }
+    setIsInitial(false);
   }
 
-  const [blogPosts, setBlogPosts] = useState(cachedBlogPosts || []);
+  const [blogPosts, setBlogPosts] = useState(cachedBlogPosts ?? []);
   const [lastNotionCardId, setLastNotionCardId] = useState("start");
-  const [HaveMoreBlogPosts, setHaveMoreBlogPosts] = useState(cachedHaveMoreBlogPosts || true);
-  const { data: tenBlogPosts = [], error } = useSWR("/api/notion/blog/10/" + lastNotionCardId, blogFetcher);
+  const [HaveMoreBlogPosts, setHaveMoreBlogPosts] = useState(cachedHaveMoreBlogPosts);
+  const { data: tenBlogPosts, error } = useSWR(HaveMoreBlogPosts ? "/api/notion/blog/10/" + lastNotionCardId : null, blogFetcher);
 
   useEffect(() => {
     // set to local storage
@@ -46,7 +55,7 @@ const Blog = () => {
   useEffect(() => {
     //set to local storage
     if (typeof window !== "undefined") {
-      localStorage.setItem("HaveMoreBlogPosts", JSON.stringify(HaveMoreBlogPosts));
+      localStorage.setItem("haveMoreBlogPosts", JSON.stringify(HaveMoreBlogPosts));
     }
   }, [HaveMoreBlogPosts]);
 

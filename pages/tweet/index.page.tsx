@@ -12,6 +12,7 @@ import PostCardPageless from "./components/PostCardPageless";
 // import "react-loading-skeleton/dist/skeleton.css";
 
 const tweetFetcher = async (args: any) => {
+  console.log("tweetFetcher", args);
   return await fetch(args).then((res) => res.json());
 };
 
@@ -20,7 +21,6 @@ const Tweet = () => {
   let cachedHaveMoreTweetPosts;
   if (typeof window !== "undefined") {
     cachedTweetPosts = JSON.parse(localStorage.getItem("blogPosts"));
-    console.log("cachedTweetPosts", cachedTweetPosts);
   }
   if (typeof window !== "undefined") {
     cachedHaveMoreTweetPosts = JSON.parse(localStorage.getItem("haveMoreBlogPosts"));
@@ -29,7 +29,7 @@ const Tweet = () => {
   const [tweetPosts, setTweetPosts] = useState(cachedTweetPosts || []);
   const [lastNotionCardId, setLastNotionCardId] = useState("start");
   const [HaveMoreTweetPosts, setHaveMoreTweetPosts] = useState(cachedHaveMoreTweetPosts || true);
-  const { data: tenTweetPosts = [], error } = useSWR("/api/notion/tweet/10/" + lastNotionCardId, tweetFetcher);
+  const { data: tenTweetPosts, error } = useSWR("/api/notion/tweet/10/" + lastNotionCardId, tweetFetcher);
 
   useEffect(() => {
     // set to local storage
