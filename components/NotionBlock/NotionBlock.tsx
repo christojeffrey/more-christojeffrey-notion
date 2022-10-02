@@ -1,26 +1,6 @@
-import { Fragment } from "react";
-import styles from "./post.module.css";
-
-// suatu text biasa di notion itu bisa ada yg di bold, italic, dkk. untuk tiap Text, di render menggunakan component Text.
-export const NotionText = ({ text }) => {
-  if (!text) {
-    return null;
-  }
-  return text.map((value) => {
-    const {
-      annotations: { bold, code, color, italic, strikethrough, underline },
-      text,
-    } = value;
-    return (
-      <span className={[bold ? styles.bold : "", code ? styles.code : "", italic ? styles.italic : "", strikethrough ? styles.strikethrough : "", underline ? styles.underline : ""].join(" ")} style={color !== "default" ? { color } : {}}>
-        {text.link ? <a href={text.link.url}>{text.content}</a> : text.content}
-      </span>
-    );
-  });
-};
-
+import { NotionText } from "../NotionText/NotionText";
 // notion itu terdiri atas block-block. untuk tiap block, di render pake component renderBlock
-export const RenderNotionBlock = ({ block }) => {
+export const NotionBlock = ({ block }) => {
   const { type, id } = block;
   const value = block[type];
 
@@ -72,7 +52,7 @@ export const RenderNotionBlock = ({ block }) => {
           </summary>
           <div className="mx-6 w-3/4">
             {value.children?.map((block) => (
-              <RenderNotionBlock block={block} key={block.id} />
+              <NotionBlock block={block} key={block.id} />
             ))}
           </div>
         </details>
@@ -113,7 +93,47 @@ export const RenderNotionBlock = ({ block }) => {
           <NotionText text={value.text} />
         </div>
       );
+    case "code":
+      return (
+        <div>
+          <NotionCode text={value.text} />
+        </div>
+      );
     default:
       return <div>`❌ Unsupported block (${type === "unsupported" ? "unsupported by Notion API" : type})`</div>;
   }
 };
+const NotionCode = ({ text }) => {
+  const lines = text[0].plain_text.split("\n");
+
+  return (
+    <div className="m-5">
+      <div className="relative font-mono bg-grey-darker text-white p-5 rounded-md">
+        {lines.map((line, index) => {
+          const tabs = line.split("\t");
+          return (
+            <div key={index} className="flex">
+              <span className=" text-neutral-200 mr-4">{index + 1}</span>
+              {tabs.map((tab, index) => {
+                return (
+                  <span key={index} className="ml-[2rem]">
+                    {tab}
+                  </span>
+                );
+              })}
+            </div>
+          );
+        })}
+        <div
+          className="absolute top-4 right-4 text-primary-200 hover:text-primary-500 cursor-pointer"
+          onClick={() => {
+            navigator.clipboard.writeText(text[0].plain_text);
+          }}
+        >
+          copy
+        </div>
+      </div>
+    </div>
+  );
+};
+export default NotionBlock;

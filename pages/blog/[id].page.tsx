@@ -1,23 +1,36 @@
 import Head from "next/head";
 import { getNotionDatabase, getNotionPage, getNotionBlocks } from "../../utils/notion";
 import Link from "next/link";
-import { NotionText, RenderNotionBlock } from "../../components/post";
+
+import { useRouter } from "next/router";
+
+import NotionText from "../../components/NotionText/NotionText";
+import NotionBlock from "../../components/NotionBlock/NotionBlock";
+import useSWR from "swr";
+import PostCardPage from "./components/PostCardPage";
 
 export const databaseId = process.env.NOTION_DATABASE_ID;
 
-export default function Post({ page, blocks }) {
+const fetcher = async (args: any) => {
+  return await fetch("/api/notion/blog/3/" + args).then((res) => res.json());
+};
+
+export default function Post({ id, page, blocks }) {
   if (!page || !blocks) {
     return <div />;
   }
+  const router = useRouter();
+  // const { data: threePosts, error } = useSWR(id, fetcher);
+
   return (
     <>
       <Head>
         <title>{page.properties.Name.title[0].plain_text}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="px-3 pt-5 pb-2 bg-neutral-100 text-neutral-900 font-medium min-h-screen">
+      <div className="px-3 pt-5 pb-2 text-neutral-900  min-h-screen fade-in">
         {/* judul */}
-        <div className="centerx">
+        <div className="centerx font-medium">
           <div className="w-full md:w-15 text-left text-xl md:font-semibold">
             <NotionText text={page.properties.Name.title} />
           </div>
@@ -27,18 +40,27 @@ export default function Post({ page, blocks }) {
         <div className="centerx">
           <div className="w-full md:w-15 text-2xs md:text-base">
             {blocks.map((block) => (
-              <RenderNotionBlock block={block} key={block.id} />
+              <NotionBlock block={block} key={block.id} />
             ))}
           </div>
         </div>
         {/* isi */}
         {/* back button */}
-        <div className="centerx text-primary-700 mt-10 mb-6 font-bold text-xs md:text-base">
-          <Link href="/">
-            <a>back</a>
-          </Link>
+        <div id="back-button" className="centerx text-primary-700 mt-10 mb-6 font-bold text-xs md:text-base">
+          <a
+            onClick={() => {
+              // user router so that it preserve the scroll position
+              router.back();
+            }}
+          >
+            back
+          </a>
         </div>
         {/* back button */}
+        {/* {threePosts &&
+          threePosts.map((post, idx) => {
+            return <PostCardPage post={post} key={idx} />;
+          })} */}
       </div>
     </>
   );
@@ -79,6 +101,7 @@ export const getStaticProps = async (context) => {
 
   return {
     props: {
+      id,
       page,
       blocks: blocksWithChildren,
     },
