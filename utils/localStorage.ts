@@ -5,6 +5,10 @@ export const setToLocalStorage = (data: any, key: string) => {
 };
 export const getFromLocalStorage = (key: string) => {
   if (typeof window !== "undefined") {
-    return JSON.parse(localStorage.getItem(key));
+    let temp = localStorage.getItem(key);
+    if (temp) {
+      return JSON.parse(temp);
+    }
+    return temp;
   }
 };

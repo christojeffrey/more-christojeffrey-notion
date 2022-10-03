@@ -11,16 +11,11 @@ import PostCardPage from "./components/PostCardPage";
 
 const databaseId = process.env.NOTION_DATABASE_ID;
 
-const fetcher = async (args: any) => {
-  return await fetch("/api/notion/blog/3/" + args).then((res) => res.json());
-};
-
 export default function Post({ id, page, blocks }) {
   if (!page || !blocks) {
     return <div />;
   }
   const router = useRouter();
-  // const { data: threePosts, error } = useSWR(id, fetcher);
 
   return (
     <main>

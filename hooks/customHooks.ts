@@ -24,15 +24,12 @@ export const getClientSideProps = (keys: string[]) => {
 
   // using useRef because I just need a variable stay between render, but not trigger a re-render
   const isInitial = useRef(true);
-
   let result = [];
   if (isInitial.current) {
     keys.map((key) => {
       result.push(getFromLocalStorage(key));
     });
-
     isInitial.current = false;
   }
-
   return result;
 };
