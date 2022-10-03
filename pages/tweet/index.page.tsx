@@ -13,12 +13,14 @@ import fetcher from "../../utils/fetcher";
 import { setToLocalStorage } from "../../utils/localStorage";
 
 const Tweet = () => {
-  const [cachedTweetPosts, cachedHaveMoreTweetPosts] = getClientSideProps(["cachedTweetPosts", "cachedHaveMoreTweetPosts"]);
+  const [cachedTweetPosts, cachedHaveMoreTweetPosts, cachedLastTweetPostId] = getClientSideProps(["cachedTweetPosts", "cachedHaveMoreTweetPosts", "cachedLastTweetPostId"]);
 
   const [tweetPosts, setTweetPosts] = useState(cachedTweetPosts ?? []);
-  const [lastNotionCardId, setLastNotionCardId] = useState("start");
+  const [lastNotionCardId, setLastNotionCardId] = useState(cachedLastTweetPostId ?? "start");
   const [HaveMoreTweetPosts, setHaveMoreTweetPosts] = useState(cachedHaveMoreTweetPosts ?? true);
-  const { data: partialTweetPosts, error } = useSWR(HaveMoreTweetPosts ? "/api/notion/tweet/10/" + lastNotionCardId : null, fetcher);
+  const [fetchNow, setFetchNow] = useState(cachedHaveMoreTweetPosts ?? true);
+
+  const { data: partialTweetPosts, error } = useSWR(fetchNow ? "/api/notion/tweet/10/" + lastNotionCardId : null, fetcher);
 
   // LOCAL STORAGE SETTERS
   useEffect(() => {
@@ -28,6 +30,9 @@ const Tweet = () => {
   useEffect(() => {
     setToLocalStorage(HaveMoreTweetPosts, "cachedHaveMoreTweetPosts");
   }, [HaveMoreTweetPosts]);
+  useEffect(() => {
+    setToLocalStorage(lastNotionCardId, "cachedLastTweetPostId");
+  }, [lastNotionCardId]);
 
   useEffect(() => {
     if (partialTweetPosts) {
@@ -39,15 +44,10 @@ const Tweet = () => {
       } else {
         setTweetPosts([...tweetPosts, ...partialTweetPosts.slice(0, -1)]);
       }
+      setLastNotionCardId(partialTweetPosts[partialTweetPosts.length - 1].id);
+      setFetchNow(false);
     }
   }, [partialTweetPosts]);
-
-  const loadMoreCard = () => {
-    console.log("load more card");
-    if (HaveMoreTweetPosts) {
-      setLastNotionCardId(partialTweetPosts[partialTweetPosts.length - 1].id);
-    }
-  };
 
   if (error) {
     return <div>error</div>;
@@ -70,7 +70,7 @@ const Tweet = () => {
           <hr className="text-neutral-400 mb-2 w-full"></hr>
         </section>
         <section id="cards-of-post">
-          <InfiniteScroll hasMore={HaveMoreTweetPosts} dataLength={tweetPosts.length} next={loadMoreCard} loader={<h4>loading...</h4>} endMessage={<h4>no more posts</h4>}>
+          <InfiniteScroll hasMore={HaveMoreTweetPosts} dataLength={tweetPosts.length} next={() => setFetchNow(true)} loader={<h4>loading...</h4>} endMessage={<h4>no more posts</h4>}>
             {tweetPosts.map((post, idx) => {
               return (
                 <Fade key={idx}>
