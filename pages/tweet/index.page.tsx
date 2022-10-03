@@ -8,11 +8,9 @@ import { useState, useEffect } from "react";
 
 import Fade from "react-reveal/Fade";
 import PostCardPageless from "./components/PostCardPageless";
-// import Skeleton from "react-loading-skeleton";
-// import "react-loading-skeleton/dist/skeleton.css";
+
 
 const tweetFetcher = async (args: any) => {
-  console.log("tweetFetcher", args);
   return await fetch(args).then((res) => res.json());
 };
 
@@ -20,10 +18,10 @@ const Tweet = () => {
   let cachedTweetPosts;
   let cachedHaveMoreTweetPosts;
   if (typeof window !== "undefined") {
-    cachedTweetPosts = JSON.parse(localStorage.getItem("blogPosts"));
+    cachedTweetPosts = JSON.parse(localStorage.getItem("tweetPosts"));
   }
   if (typeof window !== "undefined") {
-    cachedHaveMoreTweetPosts = JSON.parse(localStorage.getItem("haveMoreBlogPosts"));
+    cachedHaveMoreTweetPosts = JSON.parse(localStorage.getItem("haveMoreTweetPosts"));
   }
 
   const [tweetPosts, setTweetPosts] = useState(cachedTweetPosts || []);
@@ -41,7 +39,7 @@ const Tweet = () => {
   useEffect(() => {
     //set to local storage
     if (typeof window !== "undefined") {
-      localStorage.setItem("HaveMoreTweetPosts", JSON.stringify(HaveMoreTweetPosts));
+      localStorage.setItem("haveMoreTweetPosts", JSON.stringify(HaveMoreTweetPosts));
     }
   }, [HaveMoreTweetPosts]);
 

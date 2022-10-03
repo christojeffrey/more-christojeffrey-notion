@@ -13,24 +13,22 @@ import Fade from "react-reveal/Fade";
 // import "react-loading-skeleton/dist/skeleton.css";
 
 const blogFetcher = async (args: any) => {
-  console.log("blogFetcher", args);
   return await fetch(args).then((res) => res.json());
 };
 
 const Blog = () => {
+  // alternative to 'getClientSideProps'
+  // the reason for not using useEffect with empty array is because, I want this to be runned first. before useState
   const [isInitial, setIsInitial] = useState(true);
 
   let cachedBlogPosts;
   let cachedHaveMoreBlogPosts;
   if (isInitial) {
-    console.log("============================");
     if (typeof window !== "undefined") {
       cachedBlogPosts = JSON.parse(localStorage.getItem("blogPosts"));
-      console.log("cachedBlogPosts", cachedBlogPosts);
     }
     if (typeof window !== "undefined") {
       cachedHaveMoreBlogPosts = JSON.parse(localStorage.getItem("haveMoreBlogPosts"));
-      console.log("cachedHaveMoreBlogPosts", cachedHaveMoreBlogPosts);
       if (cachedHaveMoreBlogPosts === null) {
         cachedHaveMoreBlogPosts = true;
       } else {
