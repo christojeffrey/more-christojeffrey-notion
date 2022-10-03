@@ -46,7 +46,7 @@ export default function Post({ id, page, blocks }) {
         </div>
         {/* isi */}
         {/* back button */}
-        <div id="back-button" className="centerx text-primary-700 mt-10 mb-6 font-bold text-xs md:text-base">
+        <div id="back-button" className="centerx text-primary-700 mt-10 mb-6 font-bold text-xs md:text-base hover:cursor-pointer">
           <a
             onClick={() => {
               // user router so that it preserve the scroll position
