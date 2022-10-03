@@ -9,7 +9,7 @@ const PostCardPageless = ({ post }) => {
   });
   return (
     // <Link key={post.id} href={`/${post.id}`}>
-    <div className="p-2 my-5 border-b-2 border-b-neutral-300 text-base mb-1">
+    <article className="p-2 my-5 border-b-2 border-b-neutral-300 text-base mb-1">
       {post.cover && (
         <div className="">
           gambar
@@ -20,7 +20,7 @@ const PostCardPageless = ({ post }) => {
         <NotionText text={post.properties.Name.title} />
       </div>
       <div className="text-neutral-500 text-xs">{date}</div>
-    </div>
+    </article>
     // </Link>
   );
 };

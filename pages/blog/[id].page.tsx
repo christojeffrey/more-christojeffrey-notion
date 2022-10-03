@@ -23,7 +23,7 @@ export default function Post({ id, page, blocks }) {
   // const { data: threePosts, error } = useSWR(id, fetcher);
 
   return (
-    <>
+    <main>
       <Head>
         <title>{page.properties.Name.title[0].plain_text}</title>
         <link rel="icon" href="/favicon.ico" />
@@ -62,7 +62,7 @@ export default function Post({ id, page, blocks }) {
             return <PostCardPage post={post} key={idx} />;
           })} */}
       </div>
-    </>
+    </main>
   );
 }
 

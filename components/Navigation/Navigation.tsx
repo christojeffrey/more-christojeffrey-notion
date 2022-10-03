@@ -44,7 +44,7 @@ const Navigation = () => {
             return (
               <div key={idx} className="mx-2">
                 <Link href={item.link} key={idx}>
-                  <div className="text-primary-700 mr-3 hover:text-primary-900">{item.text}</div>
+                  <a className="text-primary-700 mr-3 hover:text-primary-900">{item.text}</a>
                 </Link>
               </div>
             );
