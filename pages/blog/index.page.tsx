@@ -1,80 +1,50 @@
 import Head from "next/head";
 import InfiniteScroll from "react-infinite-scroll-component";
-
-import PostCardPage from "./components/PostCardPage";
-
-export const databaseId = process.env.NOTION_DATABASE_ID;
-
+import Fade from "react-reveal/Fade";
 import useSWR from "swr";
 import { useState, useEffect } from "react";
 
-import Fade from "react-reveal/Fade";
-// import Skeleton from "react-loading-skeleton";
-// import "react-loading-skeleton/dist/skeleton.css";
+// components
+import PostCardPage from "./components/PostCardPage";
 
-const blogFetcher = async (args: any) => {
-  return await fetch(args).then((res) => res.json());
-};
+// helpers
+import fetcher from "../../utils/fetcher";
+import { setToLocalStorage } from "../../utils/localStorage";
+import { getClientSideProps } from "../../hooks/customHooks";
 
 const Blog = () => {
-  // alternative to 'getClientSideProps'
-  // the reason for not using useEffect with empty array is because, I want this to be runned first. before useState
-  const [isInitial, setIsInitial] = useState(true);
-
-  let cachedBlogPosts;
-  let cachedHaveMoreBlogPosts;
-  if (isInitial) {
-    if (typeof window !== "undefined") {
-      cachedBlogPosts = JSON.parse(localStorage.getItem("blogPosts"));
-    }
-    if (typeof window !== "undefined") {
-      cachedHaveMoreBlogPosts = JSON.parse(localStorage.getItem("haveMoreBlogPosts"));
-      if (cachedHaveMoreBlogPosts === null) {
-        cachedHaveMoreBlogPosts = true;
-      } else {
-        cachedHaveMoreBlogPosts = JSON.parse(cachedHaveMoreBlogPosts);
-      }
-    }
-    setIsInitial(false);
-  }
+  const [cachedBlogPosts, cachedHaveMoreBlogPosts] = getClientSideProps(["cachedBlogPosts", "cachedHaveMoreBlogPosts"]);
 
   const [blogPosts, setBlogPosts] = useState(cachedBlogPosts ?? []);
   const [lastNotionCardId, setLastNotionCardId] = useState("start");
-  const [HaveMoreBlogPosts, setHaveMoreBlogPosts] = useState(cachedHaveMoreBlogPosts);
-  const { data: tenBlogPosts, error } = useSWR(HaveMoreBlogPosts ? "/api/notion/blog/10/" + lastNotionCardId : null, blogFetcher);
+  const [HaveMoreBlogPosts, setHaveMoreBlogPosts] = useState(cachedHaveMoreBlogPosts ?? true);
+  const { data: partialBlogPosts, error } = useSWR(HaveMoreBlogPosts ? "/api/notion/blog/10/" + lastNotionCardId : null, fetcher);
 
+  // LOCAL STORAGE SETTERS
   useEffect(() => {
-    // set to local storage
-    if (typeof window !== "undefined") {
-      localStorage.setItem("blogPosts", JSON.stringify(blogPosts));
-    }
+    setToLocalStorage(blogPosts, "cachedBlogPosts");
   }, [blogPosts]);
 
   useEffect(() => {
-    //set to local storage
-    if (typeof window !== "undefined") {
-      localStorage.setItem("haveMoreBlogPosts", JSON.stringify(HaveMoreBlogPosts));
-    }
+    setToLocalStorage(HaveMoreBlogPosts, "cachedHaveMoreBlogPosts");
   }, [HaveMoreBlogPosts]);
 
   useEffect(() => {
-    if (tenBlogPosts) {
-      // get everything second to last from tenBlogPosts slice
-      if (tenBlogPosts.length === 1) {
+    if (partialBlogPosts) {
+      // get everything second to last from partialBlogPosts slice
+      if (partialBlogPosts.length === 1) {
         setHaveMoreBlogPosts(false);
 
-        setBlogPosts([...blogPosts, tenBlogPosts[0]]);
+        setBlogPosts([...blogPosts, partialBlogPosts[0]]);
       } else {
-        setBlogPosts([...blogPosts, ...tenBlogPosts.slice(0, -1)]);
+        setBlogPosts([...blogPosts, ...partialBlogPosts.slice(0, -1)]);
       }
-      console.log("test");
     }
-  }, [tenBlogPosts]);
+  }, [partialBlogPosts]);
 
   const loadMoreCard = () => {
-    console.log("load more card");
     if (HaveMoreBlogPosts) {
-      setLastNotionCardId(tenBlogPosts[tenBlogPosts.length - 1].id);
+      setLastNotionCardId(partialBlogPosts[partialBlogPosts.length - 1].id);
     }
   };
 
@@ -82,22 +52,23 @@ const Blog = () => {
     return <div>error</div>;
   }
   return (
-    <div className="flex justify-center fade-in">
+    <main className="flex justify-center fade-in">
       <Head>
         <title>blog</title>
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
       <div className="w-11/12 md:w-1/2">
-        <div id="hero-container" className="md:h-[30vh] flex items-center justify-center">
+        <section id="hero-container" className="md:h-[30vh] flex items-center justify-center">
           <div>
             <h1>Blog</h1>
             <div>texts! probably taken from somewhere else</div>
           </div>
-        </div>
-        <div className="text-primary-800">All Posts</div>
-        <hr className="text-neutral-400 mb-2 w-full"></hr>
-        <div id="cards of post">
-          {/* card of post in here */}
+        </section>
+        <section id="divider">
+          <div className="text-primary-800">All Posts</div>
+          <hr className="text-neutral-400 mb-2 w-full"></hr>
+        </section>
+        <section id="cards-of-post">
           <InfiniteScroll hasMore={HaveMoreBlogPosts} dataLength={blogPosts.length} next={loadMoreCard} loader={<h4>loading...</h4>} endMessage={<h4>no more posts</h4>}>
             {blogPosts.map((post, idx) => {
               return (
@@ -107,10 +78,9 @@ const Blog = () => {
               );
             })}
           </InfiniteScroll>
-          {/* card of post in here */}
-        </div>
+        </section>
       </div>
-    </div>
+    </main>
   );
 };
 

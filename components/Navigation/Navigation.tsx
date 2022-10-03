@@ -1,5 +1,5 @@
 import Link from "next/link";
-import useWindowDimensions from "../../hooks/useWindowDimensions";
+import { useWindowDimensions } from "../../hooks/customHooks";
 import { slide as Menu } from "react-burger-menu";
 import { useState } from "react";
 const Navigation = () => {

@@ -9,7 +9,7 @@ import NotionBlock from "../../components/NotionBlock/NotionBlock";
 import useSWR from "swr";
 import PostCardPage from "./components/PostCardPage";
 
-export const databaseId = process.env.NOTION_DATABASE_ID;
+const databaseId = process.env.NOTION_DATABASE_ID;
 
 const fetcher = async (args: any) => {
   return await fetch("/api/notion/blog/3/" + args).then((res) => res.json());

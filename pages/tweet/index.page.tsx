@@ -1,65 +1,51 @@
 import Head from "next/head";
 import InfiniteScroll from "react-infinite-scroll-component";
-
-export const databaseId = process.env.NOTION_DATABASE_ID;
-
 import useSWR from "swr";
+import Fade from "react-reveal/Fade";
 import { useState, useEffect } from "react";
 
-import Fade from "react-reveal/Fade";
+// components
 import PostCardPageless from "./components/PostCardPageless";
 
-
-const tweetFetcher = async (args: any) => {
-  return await fetch(args).then((res) => res.json());
-};
+// helpers
+import { getClientSideProps } from "../../hooks/customHooks";
+import fetcher from "../../utils/fetcher";
+import { setToLocalStorage } from "../../utils/localStorage";
 
 const Tweet = () => {
-  let cachedTweetPosts;
-  let cachedHaveMoreTweetPosts;
-  if (typeof window !== "undefined") {
-    cachedTweetPosts = JSON.parse(localStorage.getItem("tweetPosts"));
-  }
-  if (typeof window !== "undefined") {
-    cachedHaveMoreTweetPosts = JSON.parse(localStorage.getItem("haveMoreTweetPosts"));
-  }
+  const [cachedTweetPosts, cachedHaveMoreTweetPosts] = getClientSideProps(["cachedTweetPosts", "cachedHaveMoreTweetPosts"]);
 
-  const [tweetPosts, setTweetPosts] = useState(cachedTweetPosts || []);
+  const [tweetPosts, setTweetPosts] = useState(cachedTweetPosts ?? []);
   const [lastNotionCardId, setLastNotionCardId] = useState("start");
-  const [HaveMoreTweetPosts, setHaveMoreTweetPosts] = useState(cachedHaveMoreTweetPosts || true);
-  const { data: tenTweetPosts, error } = useSWR("/api/notion/tweet/10/" + lastNotionCardId, tweetFetcher);
+  const [HaveMoreTweetPosts, setHaveMoreTweetPosts] = useState(cachedHaveMoreTweetPosts ?? true);
+  const { data: partialTweetPosts, error } = useSWR(HaveMoreTweetPosts ? "/api/notion/tweet/10/" + lastNotionCardId : null, fetcher);
 
+  // LOCAL STORAGE SETTERS
   useEffect(() => {
-    // set to local storage
-    if (typeof window !== "undefined") {
-      localStorage.setItem("tweetPosts", JSON.stringify(tweetPosts));
-    }
+    setToLocalStorage(tweetPosts, "cachedTweetPosts");
   }, [tweetPosts]);
 
   useEffect(() => {
-    //set to local storage
-    if (typeof window !== "undefined") {
-      localStorage.setItem("haveMoreTweetPosts", JSON.stringify(HaveMoreTweetPosts));
-    }
+    setToLocalStorage(HaveMoreTweetPosts, "cachedHaveMoreTweetPosts");
   }, [HaveMoreTweetPosts]);
 
   useEffect(() => {
-    if (tenTweetPosts) {
-      // get everything second to last from tenTweetPosts slice
-      if (tenTweetPosts.length === 1) {
+    if (partialTweetPosts) {
+      // get everything second to last from partialTweetPosts slice
+      if (partialTweetPosts.length === 1) {
         setHaveMoreTweetPosts(false);
 
-        setTweetPosts([...tweetPosts, tenTweetPosts[0]]);
+        setTweetPosts([...tweetPosts, partialTweetPosts[0]]);
       } else {
-        setTweetPosts([...tweetPosts, ...tenTweetPosts.slice(0, -1)]);
+        setTweetPosts([...tweetPosts, ...partialTweetPosts.slice(0, -1)]);
       }
     }
-  }, [tenTweetPosts]);
+  }, [partialTweetPosts]);
 
   const loadMoreCard = () => {
     console.log("load more card");
     if (HaveMoreTweetPosts) {
-      setLastNotionCardId(tenTweetPosts[tenTweetPosts.length - 1].id);
+      setLastNotionCardId(partialTweetPosts[partialTweetPosts.length - 1].id);
     }
   };
 
@@ -67,22 +53,23 @@ const Tweet = () => {
     return <div>error</div>;
   }
   return (
-    <div className="flex justify-center fade-in">
+    <main className="flex justify-center fade-in">
       <Head>
         <title>tweet</title>
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
       <div className="w-11/12 md:w-1/2">
-        <div id="hero-container" className="md:h-[30vh] flex items-center justify-center">
+        <section id="hero-container" className="md:h-[30vh] flex items-center justify-center">
           <div>
             <h1>Tweet</h1>
             <div>shorter than the shortest blog</div>
           </div>
-        </div>
-        <div className="text-primary-800">All Posts</div>
-        <hr className="text-neutral-400 mb-2 w-full"></hr>
-        <div id="cards of post">
-          {/* card of post in here */}
+        </section>
+        <section id="divider">
+          <div className="text-primary-800">All Posts</div>
+          <hr className="text-neutral-400 mb-2 w-full"></hr>
+        </section>
+        <section id="cards-of-post">
           <InfiniteScroll hasMore={HaveMoreTweetPosts} dataLength={tweetPosts.length} next={loadMoreCard} loader={<h4>loading...</h4>} endMessage={<h4>no more posts</h4>}>
             {tweetPosts.map((post, idx) => {
               return (
@@ -92,10 +79,9 @@ const Tweet = () => {
               );
             })}
           </InfiniteScroll>
-          {/* card of post in here */}
-        </div>
+        </section>
       </div>
-    </div>
+    </main>
   );
 };
 
