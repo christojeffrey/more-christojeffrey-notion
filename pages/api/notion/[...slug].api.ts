@@ -1,6 +1,7 @@
 import { NextApiResponse, NextApiRequest } from "next";
 import { getNotionDatabase } from "../../../utils/notion";
-export const databaseId = process.env.NOTION_DATABASE_ID;
+
+const databaseId = process.env.NOTION_DATABASE_ID;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   // tweet-or-blog/:size/:id-or-start

@@ -9,7 +9,7 @@ import NotionBlock from "../../components/NotionBlock/NotionBlock";
 import useSWR from "swr";
 import PostCardPage from "./components/PostCardPage";
 
-export const databaseId = process.env.NOTION_DATABASE_ID;
+const databaseId = process.env.NOTION_DATABASE_ID;
 
 const fetcher = async (args: any) => {
   return await fetch("/api/notion/blog/3/" + args).then((res) => res.json());
@@ -23,7 +23,7 @@ export default function Post({ id, page, blocks }) {
   // const { data: threePosts, error } = useSWR(id, fetcher);
 
   return (
-    <>
+    <main>
       <Head>
         <title>{page.properties.Name.title[0].plain_text}</title>
         <link rel="icon" href="/favicon.ico" />
@@ -49,6 +49,7 @@ export default function Post({ id, page, blocks }) {
         <div id="back-button" className="centerx text-primary-700 mt-10 mb-6 font-bold text-xs md:text-base">
           <a
             onClick={() => {
+              // user router so that it preserve the scroll position
               router.back();
             }}
           >
@@ -61,7 +62,7 @@ export default function Post({ id, page, blocks }) {
             return <PostCardPage post={post} key={idx} />;
           })} */}
       </div>
-    </>
+    </main>
   );
 }
 

@@ -9,13 +9,6 @@ const PostCardPage = ({ post }) => {
   // 7 days ago
   let today = new Date();
 
-  // if today, dateString = "Today"
-  // if this week, dateString = "this week"
-  // if this month, dateString = "this month"
-  // else, show date
-  console.log("date.getTime()");
-  // console.log(date.getTime());
-  // console.log("check", date.getTime() < sevenDaysAgo.getTime());
   if (date.toDateString() === new Date().toDateString()) {
     dateString = "Today";
     // if yesterday
@@ -26,7 +19,7 @@ const PostCardPage = ({ post }) => {
   } else {
     // check how many days ago
     let daysAgo = Math.floor((today.getTime() - date.getTime()) / (1000 * 3600 * 24));
-    console.log("daysAgo", daysAgo);
+    // console.log("daysAgo", daysAgo);
     if (daysAgo <= 7) {
       dateString = "this week";
     } else if (daysAgo <= 28) {
@@ -51,42 +44,32 @@ const PostCardPage = ({ post }) => {
         },
       }}
     >
-      <div className="hover:bg-neutral-300 px-2 py-6 hover:scale-[1.01] hover:duration-75 text-base mx-1 mb-1 rounded-md">
-        {post.cover ? (
-          <div className="flex">
-            <div className="basis-3/4">
+      <a>
+        <article className="hover:bg-neutral-300 px-2 py-6 hover:scale-[1.01] hover:duration-75 text-base mx-1 mb-1 rounded-md">
+          <div className={`${post.cover ? "flex" : ""}`}>
+            <section className={`${post.cover ? "basis-3/4" : ""}`}>
               <div className="font-bold">
                 <NotionText text={post.properties.Name.title} />
               </div>
               <div className="flex">
-                <div className="text-neutral-500 text-xs">{dateString}</div>
-                {post.properties.tags.multi_select.map((e) => {
-                  <div>{e.name}</div>;
+                <div className="text-neutral-500 text-xs basis-2/5 sm:basis-1/4">{dateString}</div>
+                {post.properties.tags.multi_select.map((e: any, index: any) => {
+                  return (
+                    <div key={index} className="text-3xs text-neutral-500 border-2 rounded-full px-1 mx-1 border-neutral-300">
+                      {e.name}
+                    </div>
+                  );
                 })}
               </div>
-            </div>
-            <div className="basis-1/4">
-              <img src={post.cover.file.url} alt="Cover Image" className="h-9 w-10 object-contain" />
-            </div>
+            </section>
+            {post.cover && (
+              <section className={`${post.cover ? "basis-1/4" : ""}`}>
+                <img src={post.cover.file.url} alt="Cover Image" className="h-9 w-10 object-contain" />
+              </section>
+            )}
           </div>
-        ) : (
-          <div>
-            <div className="font-bold">
-              <NotionText text={post.properties.Name.title} />
-            </div>
-            <div className="flex">
-              <div className="text-neutral-500 text-xs basis-2/5 sm:basis-1/4">{dateString}</div>
-              {post.properties.tags.multi_select.map((e: any, index: any) => {
-                return (
-                  <div key={index} className="text-3xs text-neutral-500 border-2 rounded-full px-1 mx-1 border-neutral-300">
-                    {e.name}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-      </div>
+        </article>
+      </a>
     </Link>
   );
 };

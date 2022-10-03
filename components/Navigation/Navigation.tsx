@@ -1,6 +1,7 @@
 import Link from "next/link";
-import useWindowDimensions from "../../hooks/useWindowDimensions";
+import { useWindowDimensions } from "../../hooks/customHooks";
 import { slide as Menu } from "react-burger-menu";
+import { useState } from "react";
 const Navigation = () => {
   const linkOption = [
     {
@@ -19,11 +20,21 @@ const Navigation = () => {
       text: "photo",
       link: "/photo",
     },
+    {
+      text: "external",
+      link: "/external",
+    },
   ];
   // check is mobile
 
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleStateChange = (state) => {
+    setIsOpen(state.isOpen);
+  };
 
   if (!isMobile) {
     return (
@@ -33,7 +44,7 @@ const Navigation = () => {
             return (
               <div key={idx} className="mx-2">
                 <Link href={item.link} key={idx}>
-                  <div className="text-primary-700 mr-3 hover:text-primary-900">{item.text}</div>
+                  <a className="text-primary-700 mr-3 hover:text-primary-900">{item.text}</a>
                 </Link>
               </div>
             );
@@ -47,12 +58,18 @@ const Navigation = () => {
   } else {
     return (
       <>
-        <Menu isOpen={false} right>
+        <Menu isOpen={isOpen} onStateChange={handleStateChange} right>
           <div className="mx-2 text-xs flex">
             {linkOption.map((item, idx) => {
               return (
                 <Link href={item.link} key={idx}>
-                  <div className="text-white mr-3 hover:text-primary-900 p-1">{item.text}</div>
+                  <a
+                    onClick={() => {
+                      setIsOpen(false);
+                    }}
+                  >
+                    <div className="text-white mr-3 hover:text-primary-900 p-1">{item.text}</div>
+                  </a>
                 </Link>
               );
             })}

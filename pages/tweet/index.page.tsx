@@ -1,93 +1,88 @@
 import Head from "next/head";
+import InfiniteScroll from "react-infinite-scroll-component";
+import useSWR from "swr";
+import Fade from "react-reveal/Fade";
+import { useState, useEffect } from "react";
 
-import { getNotionDatabase } from "../../utils/notion";
+// components
+import PostCardPageless from "./components/PostCardPageless";
 
-import NotionText from "../../components/NotionText/NotionText";
+// helpers
+import { getClientSideProps } from "../../hooks/customHooks";
+import fetcher from "../../utils/fetcher";
+import { setToLocalStorage } from "../../utils/localStorage";
 
-export const databaseId = process.env.NOTION_DATABASE_ID;
+const Tweet = () => {
+  const [cachedTweetPosts, cachedHaveMoreTweetPosts] = getClientSideProps(["cachedTweetPosts", "cachedHaveMoreTweetPosts"]);
 
-const Blog = ({ posts }) => {
+  const [tweetPosts, setTweetPosts] = useState(cachedTweetPosts ?? []);
+  const [lastNotionCardId, setLastNotionCardId] = useState("start");
+  const [HaveMoreTweetPosts, setHaveMoreTweetPosts] = useState(cachedHaveMoreTweetPosts ?? true);
+  const { data: partialTweetPosts, error } = useSWR(HaveMoreTweetPosts ? "/api/notion/tweet/10/" + lastNotionCardId : null, fetcher);
+
+  // LOCAL STORAGE SETTERS
+  useEffect(() => {
+    setToLocalStorage(tweetPosts, "cachedTweetPosts");
+  }, [tweetPosts]);
+
+  useEffect(() => {
+    setToLocalStorage(HaveMoreTweetPosts, "cachedHaveMoreTweetPosts");
+  }, [HaveMoreTweetPosts]);
+
+  useEffect(() => {
+    if (partialTweetPosts) {
+      // get everything second to last from partialTweetPosts slice
+      if (partialTweetPosts.length === 1) {
+        setHaveMoreTweetPosts(false);
+
+        setTweetPosts([...tweetPosts, partialTweetPosts[0]]);
+      } else {
+        setTweetPosts([...tweetPosts, ...partialTweetPosts.slice(0, -1)]);
+      }
+    }
+  }, [partialTweetPosts]);
+
+  const loadMoreCard = () => {
+    console.log("load more card");
+    if (HaveMoreTweetPosts) {
+      setLastNotionCardId(partialTweetPosts[partialTweetPosts.length - 1].id);
+    }
+  };
+
+  if (error) {
+    return <div>error</div>;
+  }
   return (
-    <div className="flex justify-center fade-in">
+    <main className="flex justify-center fade-in">
       <Head>
         <title>tweet</title>
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
-      <div className="w-1/2">
-        <div id="hero-container" className="h-[30vh] flex items-center justify-center">
+      <div className="w-11/12 md:w-1/2">
+        <section id="hero-container" className="md:h-[30vh] flex items-center justify-center">
           <div>
-            <h1>tweet</h1>
+            <h1>Tweet</h1>
             <div>shorter than the shortest blog</div>
           </div>
-        </div>
-        <div className="text-primary-800">All Posts</div>
-        <hr className="text-neutral-400 mb-2 w-full"></hr>
-        <div id="cards of post">
-          {/* card of post in here */}
-
-          {posts.map((post, idx) => {
-            return (
-              <div key={idx}>
-                <PostCardPageless post={post} />
-              </div>
-            );
-          })}
-
-          {/* card of post in here */}
-        </div>
+        </section>
+        <section id="divider">
+          <div className="text-primary-800">All Posts</div>
+          <hr className="text-neutral-400 mb-2 w-full"></hr>
+        </section>
+        <section id="cards-of-post">
+          <InfiniteScroll hasMore={HaveMoreTweetPosts} dataLength={tweetPosts.length} next={loadMoreCard} loader={<h4>loading...</h4>} endMessage={<h4>no more posts</h4>}>
+            {tweetPosts.map((post, idx) => {
+              return (
+                <Fade key={idx}>
+                  <PostCardPageless post={post} />
+                </Fade>
+              );
+            })}
+          </InfiniteScroll>
+        </section>
       </div>
-    </div>
+    </main>
   );
 };
 
-export const getServerSideProps = async () => {
-  const posts = await getNotionDatabase(databaseId, undefined, 10, {
-    and: [
-      {
-        property: "pageless",
-        checkbox: {
-          equals: true,
-        },
-      },
-      {
-        property: "publish",
-        checkbox: {
-          equals: true,
-        },
-      },
-    ],
-  });
-
-  return {
-    props: {
-      posts,
-    },
-  };
-};
-
-export default Blog;
-
-const PostCardPageless = ({ post }) => {
-  // console.log("==================");
-  // console.log("post", post);
-  const date = new Date(post.last_edited_time).toLocaleString("en-US", {
-    month: "short",
-    day: "2-digit",
-  });
-  return (
-    // <Link key={post.id} href={`/${post.id}`}>
-    <div className="p-2 my-5 border-b-2 border-b-neutral-300 text-base mb-1">
-      {post.cover && (
-        <div className="">
-          gambar
-          <img src={post.cover.file.url} alt="Cover Image" />
-        </div>
-      )}
-      <div>
-        <NotionText text={post.properties.Name.title} />
-      </div>
-      <div className="text-neutral-500 text-xs">{date}</div>
-    </div>
-    // </Link>
-  );
-};
+export default Tweet;

@@ -2,6 +2,12 @@ import Navigation from "../components/Navigation/Navigation";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
+  if (typeof window !== "undefined") {
+    window.onbeforeunload = function () {
+      localStorage.clear();
+    };
+  }
+
   return (
     <>
       <Navigation />
