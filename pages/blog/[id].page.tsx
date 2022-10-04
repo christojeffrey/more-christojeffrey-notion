@@ -18,7 +18,7 @@ export default function Post({ id, page, blocks }) {
   const router = useRouter();
 
   return (
-    <main>
+    <article>
       <Head>
         <title>{page.properties.Name.title[0].plain_text}</title>
         <link rel="icon" href="/favicon.ico" />
@@ -57,7 +57,7 @@ export default function Post({ id, page, blocks }) {
             return <PostCardPage post={post} key={idx} />;
           })} */}
       </div>
-    </main>
+    </article>
   );
 }
 
