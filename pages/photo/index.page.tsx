@@ -1,4 +1,9 @@
+// import useSWR from "swr";
+// import fetcher from "../../utils/fetcher";
+
 const Photo = () => {
+  // const { data, error } = useSWR("/api/notion/photo/", fetcher);
+  // console.log(data);
   return (
     <main className="text-center p-5 fade-in flex items-center justify-center">
       <div className="w-4/5 md:w-1/4">
