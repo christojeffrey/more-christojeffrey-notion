@@ -45,7 +45,7 @@ const PostCardPage = ({ post }) => {
       }}
     >
       <a>
-        <article className="hover:bg-neutral-300 px-2 py-6 hover:scale-[1.01] hover:duration-75 text-base mx-1 mb-1 rounded-md">
+        <div className="hover:bg-neutral-300 px-2 py-6 hover:scale-[1.01] hover:duration-75 text-base mx-1 mb-1 rounded-md">
           <div className={`${post.cover ? "flex" : ""}`}>
             <section className={`${post.cover ? "basis-3/4" : ""}`}>
               <div className="font-bold">
@@ -68,7 +68,7 @@ const PostCardPage = ({ post }) => {
               </section>
             )}
           </div>
-        </article>
+        </div>
       </a>
     </Link>
   );

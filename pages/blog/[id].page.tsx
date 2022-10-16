@@ -9,7 +9,7 @@ import NotionBlock from "../../components/NotionBlock/NotionBlock";
 import useSWR from "swr";
 import PostCardPage from "./components/PostCardPage";
 
-const databaseId = process.env.NOTION_DATABASE_ID;
+const databaseId = process.env.NOTION_DATABASE_ID_BLOG_TWEET;
 
 export default function Post({ id, page, blocks }) {
   if (!page || !blocks) {
@@ -18,10 +18,10 @@ export default function Post({ id, page, blocks }) {
   const router = useRouter();
 
   return (
-    <main>
+    <article>
       <Head>
         <title>{page.properties.Name.title[0].plain_text}</title>
-        <link rel="icon" href="/favicon.ico" />
+        {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
       <div className="px-3 pt-5 pb-2 text-neutral-900  min-h-screen fade-in">
         {/* judul */}
@@ -57,7 +57,7 @@ export default function Post({ id, page, blocks }) {
             return <PostCardPage post={post} key={idx} />;
           })} */}
       </div>
-    </main>
+    </article>
   );
 }
 

@@ -2,7 +2,7 @@ import Head from "next/head";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Fade from "react-reveal/Fade";
 import useSWR from "swr";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 // components
 import PostCardPage from "./components/PostCardPage";
@@ -16,11 +16,11 @@ const Blog = () => {
   const [cachedBlogPosts, cachedHaveMoreBlogPosts, cachedLastBlogPostId] = getClientSideProps(["cachedBlogPosts", "cachedHaveMoreBlogPosts", "cachedLastBlogPostId"]);
 
   const [blogPosts, setBlogPosts] = useState(cachedBlogPosts ?? []);
-  const [lastNotionCardId, setLastNotionCardId] = useState(cachedLastBlogPostId ?? "start");
+  const [lastNotionCardId, setLastNotionCardId] = useState(cachedLastBlogPostId);
   const [haveMoreBlogPosts, setHaveMoreBlogPosts] = useState(cachedHaveMoreBlogPosts ?? true);
   const [fetchNow, setFetchNow] = useState(cachedHaveMoreBlogPosts ?? true);
 
-  const { data: partialBlogPosts, error } = useSWR(fetchNow ? "/api/notion/blog/10/" + lastNotionCardId : null, fetcher);
+  const { data: partialBlogPosts, error } = useSWR(fetchNow ? "/api/notion/blog/10/" + (lastNotionCardId ?? "") : null, fetcher);
 
   // LOCAL STORAGE SETTERS
   useEffect(() => {
@@ -37,6 +37,7 @@ const Blog = () => {
 
   useEffect(() => {
     if (partialBlogPosts) {
+      setFetchNow(false);
       // get everything second to last from partialBlogPosts slice
       if (partialBlogPosts.length === 1) {
         setHaveMoreBlogPosts(false);

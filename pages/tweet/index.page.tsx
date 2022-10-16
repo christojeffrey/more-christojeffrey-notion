@@ -16,11 +16,11 @@ const Tweet = () => {
   const [cachedTweetPosts, cachedHaveMoreTweetPosts, cachedLastTweetPostId] = getClientSideProps(["cachedTweetPosts", "cachedHaveMoreTweetPosts", "cachedLastTweetPostId"]);
 
   const [tweetPosts, setTweetPosts] = useState(cachedTweetPosts ?? []);
-  const [lastNotionCardId, setLastNotionCardId] = useState(cachedLastTweetPostId ?? "start");
+  const [lastNotionCardId, setLastNotionCardId] = useState(cachedLastTweetPostId);
   const [HaveMoreTweetPosts, setHaveMoreTweetPosts] = useState(cachedHaveMoreTweetPosts ?? true);
   const [fetchNow, setFetchNow] = useState(cachedHaveMoreTweetPosts ?? true);
 
-  const { data: partialTweetPosts, error } = useSWR(fetchNow ? "/api/notion/tweet/10/" + lastNotionCardId : null, fetcher);
+  const { data: partialTweetPosts, error } = useSWR(fetchNow ? "/api/notion/tweet/10/" + (lastNotionCardId ?? "") : null, fetcher);
 
   // LOCAL STORAGE SETTERS
   useEffect(() => {
@@ -36,6 +36,7 @@ const Tweet = () => {
 
   useEffect(() => {
     if (partialTweetPosts) {
+      setFetchNow(false);
       // get everything second to last from partialTweetPosts slice
       if (partialTweetPosts.length === 1) {
         setHaveMoreTweetPosts(false);
