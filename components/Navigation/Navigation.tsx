@@ -12,18 +12,18 @@ const Navigation = () => {
       text: "blog",
       link: "/blog",
     },
-    {
-      text: "tweet",
-      link: "/tweet",
-    },
+    // {
+    //   text: "tweet",
+    //   link: "/tweet",
+    // },
     {
       text: "photo",
       link: "/photo",
     },
-    {
-      text: "external",
-      link: "/external",
-    },
+    // {
+    //   text: "external",
+    //   link: "/external",
+    // },
   ];
   // check is mobile
 
